@@ -1,85 +1,754 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sturm & Róisín - Coming Soon</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #ffffff;
-        }
-        
-        .container {
-            text-align: center;
-            padding: 2rem;
-            max-width: 600px;
-        }
-        
-        .logo {
-            max-width: 300px;
-            width: 80%;
-            height: auto;
-            margin: 0 auto 3rem;
-            filter: drop-shadow(0 10px 30px rgba(255, 255, 255, 0.1));
-        }
-        
-        h1 {
-            font-size: 3rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-        
-        .tagline {
-            font-size: 1.5rem;
-            font-style: italic;
-            color: #cccccc;
-            margin-bottom: 3rem;
-            letter-spacing: 0.05em;
-        }
-        
-        .coming-soon {
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: #999999;
-            font-weight: 300;
-        }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .tagline {
-                font-size: 1.2rem;
-            }
-            
-            .coming-soon {
-                font-size: 1rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sturm & Róisín — Strength & Grace</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --white: #fafaf8;
+    --off-white: #f4f2ed;
+    --pale-grey: #e8e5de;
+    --gold: #c4a35a;
+    --gold-light: #d9bc85;
+    --gold-pale: #f0e6cc;
+    --charcoal: #2a2a28;
+    --mid: #5a5a54;
+    --light: #9a9a90;
+    --border: rgba(196,163,90,0.2);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.8rem 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    letter-spacing: 0.05em;
+    color: var(--charcoal);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); font-style: italic; }
+  .nav-links {
+    display: flex; gap: 2.5rem;
+  }
+  .nav-links a {
+    color: var(--light);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8rem 4rem 6rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--white);
+  }
+
+  .hero-bg-ornament {
+    position: absolute;
+    width: 600px; height: 600px;
+    border: 1px solid rgba(196,163,90,0.08);
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 8s ease-in-out infinite;
+  }
+  .hero-bg-ornament::before {
+    content: '';
+    position: absolute; inset: 40px;
+    border: 1px solid rgba(196,163,90,0.06);
+    border-radius: 50%;
+    animation: pulse 8s 2s ease-in-out infinite;
+  }
+  .hero-bg-ornament::after {
+    content: '';
+    position: absolute; inset: 80px;
+    border: 1px solid rgba(196,163,90,0.04);
+    border-radius: 50%;
+    animation: pulse 8s 4s ease-in-out infinite;
+  }
+
+  .hero-pre {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    color: var(--charcoal);
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .hero-title .amp {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-rule {
+    width: 60px; height: 1px;
+    background: var(--gold);
+    margin: 2.5rem auto;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s forwards;
+  }
+
+  .hero-tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--mid);
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.7s forwards;
+  }
+
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    line-height: 2;
+    color: var(--light);
+    max-width: 480px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.9s forwards;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 3rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--light);
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollDrop 2s ease-in-out infinite;
+  }
+
+  /* ABOUT */
+  #about {
+    padding: 8rem 5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: center;
+    background: var(--off-white);
+    position: relative;
+  }
+  #about::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 5rem; right: 5rem;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+    opacity: 0.4;
+  }
+
+  .about-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .about-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 2rem;
+  }
+  .about-heading em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .about-body {
+    font-size: 0.85rem;
+    line-height: 2.1;
+    color: var(--mid);
+    margin-bottom: 1.25rem;
+  }
+
+  .about-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .about-stat {
+    padding: 2rem 1.5rem;
+    background: var(--white);
+    border: 1px solid var(--border);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .about-stat:hover {
+    border-color: var(--gold-light);
+    box-shadow: 0 4px 24px rgba(196,163,90,0.08);
+  }
+  .about-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .about-stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--light);
+  }
+
+  /* DIVISIONS */
+  #divisions {
+    padding: 8rem 5rem;
+    background: var(--white);
+    position: relative;
+  }
+  #divisions::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 5rem; right: 5rem;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+    opacity: 0.4;
+  }
+
+  .divisions-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+  .divisions-header .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.25rem;
+  }
+  .divisions-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    color: var(--charcoal);
+  }
+  .divisions-header h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .divisions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .division-card {
+    border: 1px solid var(--border);
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
+    background: var(--white);
+  }
+  .division-card:hover {
+    border-color: var(--gold-light);
+    box-shadow: 0 8px 40px rgba(196,163,90,0.1);
+    transform: translateY(-4px);
+  }
+  .division-card.coming-soon {
+    opacity: 0.6;
+    background: var(--off-white);
+  }
+  .division-card.coming-soon:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .division-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: rgba(196,163,90,0.08);
+    position: absolute;
+    top: 1rem; right: 1.5rem;
+    line-height: 1;
+    font-weight: 700;
+    transition: color 0.4s;
+  }
+  .division-card:hover .division-num { color: rgba(196,163,90,0.15); }
+
+  .division-icon {
+    width: 40px; height: 1px;
+    background: var(--gold);
+    margin-bottom: 2rem;
+    transition: width 0.4s;
+  }
+  .division-card:hover .division-icon { width: 60px; }
+
+  .division-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .division-tagline {
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .division-desc {
+    font-size: 0.8rem;
+    line-height: 1.9;
+    color: var(--mid);
+  }
+
+  .division-badge {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--border);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--light);
+  }
+  .division-badge.active {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* CONTACT */
+  #contact {
+    padding: 8rem 5rem;
+    background: var(--charcoal);
+    position: relative;
+    overflow: hidden;
+  }
+  #contact::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 500px; height: 500px;
+    border: 1px solid rgba(196,163,90,0.06);
+    border-radius: 50%;
+  }
+  #contact::after {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 300px; height: 300px;
+    border: 1px solid rgba(196,163,90,0.04);
+    border-radius: 50%;
+  }
+
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+  .contact-heading em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .contact-text {
+    font-size: 0.82rem;
+    line-height: 2;
+    color: rgba(250,250,248,0.45);
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(250,250,248,0.4);
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(196,163,90,0.15);
+    padding: 0.9rem 1.1rem;
+    color: var(--white);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    -webkit-appearance: none;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.06);
+  }
+  .form-group select option { background: var(--charcoal); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+
+  .form-submit {
+    margin-top: 0.5rem;
+    padding: 1rem 2.5rem;
+    background: var(--gold);
+    color: var(--charcoal);
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    align-self: flex-start;
+  }
+  .form-submit:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 1.75rem 5rem;
+    background: #1e1e1c;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    color: rgba(250,250,248,0.35);
+  }
+  .footer-logo span { font-style: italic; color: rgba(196,163,90,0.5); }
+  .footer-built {
+    font-size: 0.65rem;
+    color: rgba(250,250,248,0.2);
+    letter-spacing: 0.1em;
+  }
+  .footer-built a {
+    color: rgba(196,163,90,0.5);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-built a:hover { color: var(--gold); }
+  .footer-copy {
+    font-size: 0.65rem;
+    color: rgba(250,250,248,0.2);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.04); opacity: 0.7; }
+  }
+  @keyframes scrollDrop {
+    0%, 100% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+    40% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+    80% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  @media (max-width: 960px) {
+    nav { padding: 1.5rem 2rem; }
+    #hero { padding: 8rem 2rem 5rem; }
+    #about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+    .about-right { grid-template-columns: 1fr 1fr; }
+    #divisions { padding: 5rem 2rem; }
+    .divisions-grid { grid-template-columns: 1fr; }
+    #contact { padding: 5rem 2rem; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <img src="logo.png" alt="Sturm & Róisín" class="logo">
-        <h1>Sturm & Róisín</h1>
-        <p class="tagline">Strength and Grace</p>
-        <p class="coming-soon">Coming Soon</p>
+
+<nav>
+  <a href="#" class="nav-logo">Sturm <span>&</span> Róisín</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#divisions">Ventures</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-ornament"></div>
+
+  <p class="hero-pre">Est. 2024 &nbsp;·&nbsp; Delight, Arkansas</p>
+
+  <h1 class="hero-title">
+    Sturm <span class="amp">&</span> Róisín
+  </h1>
+
+  <div class="hero-rule"></div>
+
+  <p class="hero-tagline">Strength &amp; Grace</p>
+
+  <p class="hero-sub">A family of purposeful ventures built on the belief that great ideas, executed with care, leave a lasting mark.</p>
+
+  <div class="hero-scroll">
+    <span>Discover</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div>
+    <p class="about-label reveal">Who We Are</p>
+    <h2 class="about-heading reveal">
+      Built with intention.<br>
+      <em>Driven by purpose.</em>
+    </h2>
+    <p class="about-body reveal reveal-delay-1">
+      Sturm & Róisín is a parent company rooted in Delight, Arkansas — a portfolio of ventures that each carry the same core values: strength in what we build, grace in how we do it.
+    </p>
+    <p class="about-body reveal reveal-delay-1">
+      The name reflects who we are. Sturm — the drive, the momentum, the will to build something that lasts. Róisín — the care, the craft, the attention that makes the difference. Every venture under this umbrella carries both.
+    </p>
+  </div>
+  <div class="about-right reveal reveal-delay-2">
+    <div class="about-stat">
+      <div class="about-stat-num">2</div>
+      <div class="about-stat-label">Active Ventures</div>
     </div>
+    <div class="about-stat">
+      <div class="about-stat-num">1</div>
+      <div class="about-stat-label">Coming Soon</div>
+    </div>
+    <div class="about-stat">
+      <div class="about-stat-num">AR</div>
+      <div class="about-stat-label">Proudly Local</div>
+    </div>
+    <div class="about-stat">
+      <div class="about-stat-num">'24</div>
+      <div class="about-stat-label">Year Founded</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVISIONS -->
+<section id="divisions">
+  <div class="divisions-header reveal">
+    <p class="section-label">Our Ventures</p>
+    <h2>A portfolio built with <em>purpose.</em></h2>
+  </div>
+
+  <div class="divisions-grid">
+
+    <div class="division-card reveal reveal-delay-1">
+      <div class="division-num">01</div>
+      <div class="division-icon"></div>
+      <div class="division-name">Delight Digital Designs</div>
+      <div class="division-tagline">Great Support for Your Local Business</div>
+      <p class="division-desc">Web design, digital presence, and technology support built specifically for small and local businesses. We make professional digital tools accessible — without the big-agency price tag.</p>
+      <span class="division-badge active">Active</span>
+    </div>
+
+    <div class="division-card reveal reveal-delay-2">
+      <div class="division-num">02</div>
+      <div class="division-icon"></div>
+      <div class="division-name">Frame & Fortune</div>
+      <div class="division-tagline">Frame What You Love</div>
+      <p class="division-desc">Premium wall art and framed print collections for the home. Curated designs that transform your walls — and the moments that matter most — into something you'll treasure.</p>
+      <span class="division-badge active">Active</span>
+    </div>
+
+    <div class="division-card coming-soon reveal reveal-delay-3">
+      <div class="division-num">03</div>
+      <div class="division-icon"></div>
+      <div class="division-name">Publishing</div>
+      <div class="division-tagline">Something is coming.</div>
+      <p class="division-desc">A new publishing venture is taking shape under the Sturm & Róisín umbrella. Details to follow — but the foundation is being built with the same care and intention as everything else we do.</p>
+      <span class="division-badge">Coming Soon</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div>
+      <p class="contact-label reveal">Get In Touch</p>
+      <h2 class="contact-heading reveal">
+        Let's start a<br><em>conversation.</em>
+      </h2>
+      <p class="contact-text reveal">Whether you're interested in working with one of our ventures or just want to know more about what we're building — we'd love to hear from you.</p>
+    </div>
+
+    <form class="contact-form reveal" action="https://formspree.io/f/mvzbywar" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Chris">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Sturm">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="hello@example.com">
+      </div>
+      <div class="form-group">
+        <label>I'm interested in</label>
+        <select>
+          <option value="">Select a venture...</option>
+          <option>Delight Digital Designs</option>
+          <option>Frame & Fortune</option>
+          <option>General Inquiry</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell us what's on your mind..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Sturm <span>&</span> Róisín, LLC</div>
+  <div class="footer-built">Built by <a href="#">Delight Digital Designs</a></div>
+  <div class="footer-copy">© 2026 All rights reserved</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+
+
+</script>
 </body>
 </html>
