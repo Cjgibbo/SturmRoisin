@@ -1,909 +1,788 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Delight Digital Designs | Big Online Presence for Small Town Businesses</title>
-  <meta name="description" content="Delight Digital Designs — affordable websites built for small town businesses across America. Setup from $149.99, plans from $39.99/mo." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    /* ─── RESET & BASE ─── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: #f5f9f7;
-      color: #1a3a2e;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sturm & Róisín — Strength & Grace</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* ─── CSS VARIABLES ─── */
-    :root {
-      --forest: #1a5c3a;
-      --sage:   #3d8b6e;
-      --mint:   #7ecba1;
-      --sky:    #2e7ebf;
-      --blue:   #1a4f7a;
-      --water:  #6bb8e0;
-      --cream:  #f5f9f7;
-      --dark:   #0f2a1e;
-      --text:   #1a3a2e;
-      --muted:  #5a7a6a;
-      --white:  #ffffff;
-    }
+  :root {
+    --white: #fafaf8;
+    --off-white: #f4f2ed;
+    --pale-grey: #e8e5de;
+    --gold: #c4a35a;
+    --gold-light: #d9bc85;
+    --gold-pale: #f0e6cc;
+    --charcoal: #2a2a28;
+    --mid: #5a5a54;
+    --light: #9a9a90;
+    --border: rgba(196,163,90,0.2);
+  }
 
-    /* ─── NAV ─── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(245,249,247,0.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 2px solid var(--mint);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 68px;
-    }
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: var(--forest);
-      text-decoration: none;
-      letter-spacing: -0.5px;
-    }
-    .nav-logo span { color: var(--sky); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--muted);
-      transition: color 0.2s;
-      letter-spacing: 0.3px;
-    }
-    .nav-links a:hover { color: var(--forest); }
-    .nav-cta {
-      background: var(--sky);
-      color: var(--white) !important;
-      padding: 0.5rem 1.2rem;
-      border-radius: 50px;
-      transition: background 0.2s, transform 0.15s !important;
-    }
-    .nav-cta:hover { background: var(--blue) !important; transform: translateY(-1px); }
+  html { scroll-behavior: smooth; }
 
-    /* ─── HERO ─── */
-    #home {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding: 100px 5% 60px;
-    }
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #0f2a1e 0%, #1a5c3a 45%, #2e7ebf 100%);
-      z-index: 0;
-    }
-    .hero-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 20% 80%, rgba(126,203,161,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(107,184,224,0.2) 0%, transparent 50%);
-    }
-    /* decorative wavy shapes */
-    .hero-wave {
-      position: absolute;
-      bottom: -2px; left: 0; right: 0;
-      z-index: 1;
-    }
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 700px;
-    }
-    .hero-badge {
-      display: inline-block;
-      background: rgba(126,203,161,0.2);
-      border: 1px solid var(--mint);
-      color: var(--mint);
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      padding: 0.4rem 1rem;
-      border-radius: 50px;
-      margin-bottom: 1.5rem;
-      animation: fadeUp 0.6s ease both;
-    }
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.8rem, 6vw, 5rem);
-      font-weight: 900;
-      color: var(--white);
-      line-height: 1.1;
-      margin-bottom: 1.2rem;
-      animation: fadeUp 0.6s 0.1s ease both;
-    }
-    .hero-title .accent { color: var(--mint); }
-    .hero-subtitle {
-      font-size: 1.2rem;
-      color: rgba(255,255,255,0.78);
-      line-height: 1.7;
-      max-width: 520px;
-      margin-bottom: 2.5rem;
-      font-weight: 600;
-      animation: fadeUp 0.6s 0.2s ease both;
-    }
-    .hero-buttons {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      animation: fadeUp 0.6s 0.3s ease both;
-    }
-    .btn-primary {
-      background: var(--sky);
-      color: var(--white);
-      padding: 0.85rem 2rem;
-      border-radius: 50px;
-      font-weight: 800;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(46,126,191,0.4);
-    }
-    .btn-primary:hover { background: var(--blue); transform: translateY(-2px); box-shadow: 0 6px 28px rgba(46,126,191,0.5); }
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      padding: 0.85rem 2rem;
-      border-radius: 50px;
-      border: 2px solid rgba(255,255,255,0.4);
-      font-weight: 800;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-    }
-    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+  body {
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
 
-    /* ─── VISITOR COUNTER ─── */
-    .hero-counter {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.7rem;
-      margin-top: 2rem;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(126,203,161,0.35);
-      border-radius: 50px;
-      padding: 0.55rem 1.3rem;
-      animation: fadeUp 0.6s 0.4s ease both;
-    }
-    .counter-icon { font-size: 1rem; }
-    .counter-number {
-      font-size: 1.15rem;
-      font-weight: 900;
-      color: var(--mint);
-      letter-spacing: -0.5px;
-    }
-    .counter-label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: rgba(255,255,255,0.65);
-      letter-spacing: 0.3px;
-    }
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.8rem 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    letter-spacing: 0.05em;
+    color: var(--charcoal);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); font-style: italic; }
+  .nav-links {
+    display: flex; gap: 2.5rem;
+  }
+  .nav-links a {
+    color: var(--light);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
 
-    /* ─── SECTIONS SHARED ─── */
-    section { padding: 90px 5%; }
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--sage);
-      margin-bottom: 0.6rem;
-    }
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 900;
-      color: var(--dark);
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-    .section-sub {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 560px;
-      line-height: 1.7;
-      margin-bottom: 3rem;
-    }
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8rem 4rem 6rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--white);
+  }
 
-    /* ─── SERVICES ─── */
-    #services { background: var(--white); }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-    .service-card {
-      background: var(--cream);
-      border: 2px solid transparent;
-      border-radius: 16px;
-      padding: 2rem;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    }
-    .service-card:hover {
-      border-color: var(--mint);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(61,139,110,0.12);
-    }
-    .service-icon {
-      font-size: 2.4rem;
-      margin-bottom: 1rem;
-    }
-    .service-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--forest);
-      margin-bottom: 0.6rem;
-    }
-    .service-card p { font-size: 0.95rem; color: var(--muted); line-height: 1.6; }
+  .hero-bg-ornament {
+    position: absolute;
+    width: 600px; height: 600px;
+    border: 1px solid rgba(196,163,90,0.08);
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 8s ease-in-out infinite;
+  }
+  .hero-bg-ornament::before {
+    content: '';
+    position: absolute; inset: 40px;
+    border: 1px solid rgba(196,163,90,0.06);
+    border-radius: 50%;
+    animation: pulse 8s 2s ease-in-out infinite;
+  }
+  .hero-bg-ornament::after {
+    content: '';
+    position: absolute; inset: 80px;
+    border: 1px solid rgba(196,163,90,0.04);
+    border-radius: 50%;
+    animation: pulse 8s 4s ease-in-out infinite;
+  }
 
-    /* ─── PRICING ─── */
-    #pricing { background: var(--cream); }
-    .pricing-note {
-      display: inline-block;
-      background: var(--forest);
-      color: var(--white);
-      padding: 0.6rem 1.4rem;
-      border-radius: 50px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 2.5rem;
-    }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-      align-items: start;
-    }
-    .pricing-card {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 2rem 1.8rem;
-      border: 2px solid #e0ede7;
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-    }
-    .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(26,92,58,0.1); }
-    .pricing-card.featured {
-      background: linear-gradient(145deg, var(--forest), var(--sage));
-      border-color: var(--forest);
-      color: var(--white);
-    }
-    .featured-badge {
-      position: absolute;
-      top: -14px; left: 50%; transform: translateX(-50%);
-      background: var(--sky);
-      color: var(--white);
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 0.3rem 1rem;
-      border-radius: 50px;
-      white-space: nowrap;
-    }
-    .pricing-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-    }
-    .pricing-card .price {
-      font-size: 2.4rem;
-      font-weight: 900;
-      color: var(--sky);
-      line-height: 1;
-      margin: 0.8rem 0 0.2rem;
-    }
-    .pricing-card.featured .price { color: var(--mint); }
-    .pricing-card .price span { font-size: 1rem; font-weight: 600; opacity: 0.7; }
-    .pricing-card .price-desc {
-      font-size: 0.85rem;
-      opacity: 0.7;
-      margin-bottom: 1.2rem;
-    }
-    .pricing-features { list-style: none; margin-bottom: 1.8rem; }
-    .pricing-features li {
-      font-size: 0.92rem;
-      padding: 0.4rem 0;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-    .pricing-card.featured .pricing-features li { border-bottom-color: rgba(255,255,255,0.15); }
-    .pricing-features li::before { content: '✓'; color: var(--sage); font-weight: 800; flex-shrink: 0; }
-    .pricing-card.featured .pricing-features li::before { color: var(--mint); }
-    .btn-card {
-      display: block;
-      text-align: center;
-      text-decoration: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 50px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .btn-card-light { background: var(--forest); color: var(--white); }
-    .btn-card-light:hover { background: var(--dark); transform: translateY(-1px); }
-    .btn-card-white { background: var(--white); color: var(--forest); }
-    .btn-card-white:hover { background: var(--cream); transform: translateY(-1px); }
-    .btn-card-sky { background: var(--sky); color: var(--white); }
-    .btn-card-sky:hover { background: var(--blue); transform: translateY(-1px); }
-    .addon-card {
-      margin-top: 1.5rem;
-      background: linear-gradient(135deg, var(--blue), var(--sky));
-      border-radius: 20px;
-      padding: 2rem;
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-    .addon-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      margin-bottom: 0.3rem;
-    }
-    .addon-card p { opacity: 0.85; max-width: 420px; font-size: 0.95rem; line-height: 1.6; }
-    .addon-price { font-size: 2rem; font-weight: 900; white-space: nowrap; }
-    .addon-price span { font-size: 1rem; font-weight: 600; opacity: 0.7; }
+  .hero-pre {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.2s forwards;
+  }
 
-    /* ─── PORTFOLIO ─── */
-    #portfolio { background: var(--white); }
-    .portfolio-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-    .portfolio-card {
-      border-radius: 16px;
-      overflow: hidden;
-      border: 2px solid #e0ede7;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .portfolio-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(26,92,58,0.12); }
-    .portfolio-thumb {
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .portfolio-thumb-city { background: linear-gradient(135deg, #1a5c3a, #3d8b6e); }
-    .portfolio-thumb-print { background: linear-gradient(135deg, #1a4f7a, #2e7ebf); }
-    .portfolio-thumb-coming { background: linear-gradient(135deg, #2d2d2d, #555); }
-    .portfolio-info { padding: 1.3rem 1.5rem; }
-    .portfolio-info h3 { font-weight: 800; font-size: 1.1rem; color: var(--dark); margin-bottom: 0.3rem; }
-    .portfolio-info p { font-size: 0.88rem; color: var(--muted); }
-    .portfolio-tag {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      padding: 0.2rem 0.7rem;
-      border-radius: 50px;
-      margin-top: 0.6rem;
-    }
-    .tag-live { background: rgba(126,203,161,0.2); color: var(--forest); }
-    .tag-coming { background: rgba(200,200,200,0.2); color: #888; }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    color: var(--charcoal);
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .hero-title .amp {
+    color: var(--gold);
+    font-style: italic;
+  }
 
-    /* ─── CONTACT ─── */
-    #contact { background: linear-gradient(145deg, #0f2a1e, #1a5c3a); color: var(--white); }
-    #contact .section-title { color: var(--white); }
-    #contact .section-label { color: var(--mint); }
-    #contact .section-sub { color: rgba(255,255,255,0.72); }
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 4rem;
-      align-items: start;
-    }
-    .contact-info h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
-      color: var(--mint);
-    }
-    .contact-info p { font-size: 0.95rem; line-height: 1.7; opacity: 0.82; margin-bottom: 1.5rem; }
-    .contact-detail {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin-bottom: 0.8rem;
-      font-size: 0.95rem;
-      opacity: 0.85;
-    }
-    .contact-detail .icon { font-size: 1.2rem; }
-    form { display: flex; flex-direction: column; gap: 1rem; }
-    form input, form textarea, form select {
-      background: rgba(255,255,255,0.1);
-      border: 2px solid rgba(126,203,161,0.3);
-      border-radius: 10px;
-      padding: 0.85rem 1.1rem;
-      color: var(--white);
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.95rem;
-      transition: border-color 0.2s, background 0.2s;
-      width: 100%;
-    }
-    form input::placeholder, form textarea::placeholder { color: rgba(255,255,255,0.45); }
-    form input:focus, form textarea:focus, form select:focus {
-      outline: none;
-      border-color: var(--mint);
-      background: rgba(255,255,255,0.15);
-    }
-    form select option { background: var(--forest); }
-    form textarea { resize: vertical; min-height: 130px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .btn-submit {
-      background: var(--sky);
-      color: var(--white);
-      border: none;
-      border-radius: 50px;
-      padding: 0.9rem 2.5rem;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      align-self: flex-start;
-    }
-    .btn-submit:hover { background: var(--blue); transform: translateY(-2px); }
-    .form-success {
-      display: none;
-      background: rgba(126,203,161,0.2);
-      border: 2px solid var(--mint);
-      border-radius: 12px;
-      padding: 1.2rem 1.5rem;
-      color: var(--mint);
-      font-weight: 700;
-    }
+  .hero-rule {
+    width: 60px; height: 1px;
+    background: var(--gold);
+    margin: 2.5rem auto;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s forwards;
+  }
 
-    /* ─── FOOTER ─── */
-    footer {
-      background: var(--dark);
-      color: rgba(255,255,255,0.6);
-      text-align: center;
-      padding: 2rem 5%;
-      font-size: 0.88rem;
-    }
-    footer a { color: var(--mint); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-    footer strong { color: rgba(255,255,255,0.85); }
+  .hero-tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--mid);
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.7s forwards;
+  }
 
-    /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    line-height: 2;
+    color: var(--light);
+    max-width: 480px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.9s forwards;
+  }
 
-    /* ─── HAMBURGER BUTTON ─── */
-    .nav-hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      width: 36px;
-      height: 36px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-      z-index: 200;
-    }
-    .nav-hamburger span {
-      display: block;
-      height: 2.5px;
-      width: 100%;
-      background: var(--forest);
-      border-radius: 2px;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      transform-origin: center;
-    }
-    .nav-hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+  .hero-story-link {
+    margin-top: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.05s forwards;
+  }
+  .hero-story-link a {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(196,163,90,0.3);
+    padding-bottom: 0.2rem;
+    transition: border-color 0.3s;
+  }
+  .hero-story-link a:hover { border-color: var(--gold); }
 
-    /* ─── MOBILE DRAWER ─── */
-    .mobile-drawer {
-      display: none;
-      position: fixed;
-      top: 68px; left: 0; right: 0;
-      background: rgba(245,249,247,0.98);
-      backdrop-filter: blur(12px);
-      border-bottom: 2px solid var(--mint);
-      z-index: 99;
-      padding: 1.5rem 5% 2rem;
-      flex-direction: column;
-      gap: 0;
-      transform: translateY(-8px);
-      opacity: 0;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      pointer-events: none;
-    }
-    .mobile-drawer.open {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: all;
-    }
-    .mobile-drawer a {
-      display: block;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--muted);
-      padding: 0.9rem 0;
-      border-bottom: 1px solid rgba(126,203,161,0.25);
-      transition: color 0.2s;
-    }
-    .mobile-drawer a:last-child { border-bottom: none; }
-    .mobile-drawer a:hover { color: var(--forest); }
-    .mobile-drawer .drawer-cta {
-      margin-top: 1rem;
-      display: block;
-      text-align: center;
-      background: var(--sky);
-      color: var(--white) !important;
-      padding: 0.85rem 1.5rem;
-      border-radius: 50px;
-      font-weight: 800;
-      font-size: 1rem;
-      border-bottom: none !important;
-    }
-    .mobile-drawer .drawer-cta:hover { background: var(--blue); }
+  .hero-scroll {
+    position: absolute;
+    bottom: 3rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--light);
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollDrop 2s ease-in-out infinite;
+  }
 
-    /* ─── MOBILE ─── */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .nav-hamburger { display: flex; }
-      .mobile-drawer { display: flex; }
-      .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
-      .form-row { grid-template-columns: 1fr; }
-      .addon-card { flex-direction: column; }
-      section { padding: 70px 5%; }
-    }
-  </style>
+  /* ABOUT */
+  #about {
+    padding: 8rem 5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: center;
+    background: var(--off-white);
+    position: relative;
+  }
+  #about::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 5rem; right: 5rem;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+    opacity: 0.4;
+  }
+
+  .about-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .about-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 2rem;
+  }
+  .about-heading em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .about-body {
+    font-size: 0.85rem;
+    line-height: 2.1;
+    color: var(--mid);
+    margin-bottom: 1.25rem;
+  }
+
+  .about-story-link {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(196,163,90,0.3);
+    padding-bottom: 0.2rem;
+    transition: border-color 0.3s;
+  }
+  .about-story-link:hover { border-color: var(--gold); }
+
+  .about-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .about-stat {
+    padding: 2rem 1.5rem;
+    background: var(--white);
+    border: 1px solid var(--border);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .about-stat:hover {
+    border-color: var(--gold-light);
+    box-shadow: 0 4px 24px rgba(196,163,90,0.08);
+  }
+  .about-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .about-stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--light);
+  }
+
+  /* DIVISIONS */
+  #divisions {
+    padding: 8rem 5rem;
+    background: var(--white);
+    position: relative;
+  }
+  #divisions::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 5rem; right: 5rem;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+    opacity: 0.4;
+  }
+
+  .divisions-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+  .divisions-header .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.25rem;
+  }
+  .divisions-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    color: var(--charcoal);
+  }
+  .divisions-header h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .divisions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .division-card {
+    border: 1px solid var(--border);
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
+    background: var(--white);
+  }
+  .division-card:hover {
+    border-color: var(--gold-light);
+    box-shadow: 0 8px 40px rgba(196,163,90,0.1);
+    transform: translateY(-4px);
+  }
+  .division-card.coming-soon {
+    opacity: 0.6;
+    background: var(--off-white);
+  }
+  .division-card.coming-soon:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .division-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: rgba(196,163,90,0.08);
+    position: absolute;
+    top: 1rem; right: 1.5rem;
+    line-height: 1;
+    font-weight: 700;
+    transition: color 0.4s;
+  }
+  .division-card:hover .division-num { color: rgba(196,163,90,0.15); }
+
+  .division-icon {
+    width: 40px; height: 1px;
+    background: var(--gold);
+    margin-bottom: 2rem;
+    transition: width 0.4s;
+  }
+  .division-card:hover .division-icon { width: 60px; }
+
+  .division-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .division-tagline {
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .division-desc {
+    font-size: 0.8rem;
+    line-height: 1.9;
+    color: var(--mid);
+  }
+
+  .division-badge {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--border);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--light);
+  }
+  .division-badge.active {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* CONTACT */
+  #contact {
+    padding: 8rem 5rem;
+    background: var(--charcoal);
+    position: relative;
+    overflow: hidden;
+  }
+  #contact::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 500px; height: 500px;
+    border: 1px solid rgba(196,163,90,0.06);
+    border-radius: 50%;
+  }
+  #contact::after {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 300px; height: 300px;
+    border: 1px solid rgba(196,163,90,0.04);
+    border-radius: 50%;
+  }
+
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+  .contact-heading em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .contact-text {
+    font-size: 0.82rem;
+    line-height: 2;
+    color: rgba(250,250,248,0.45);
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(250,250,248,0.4);
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(196,163,90,0.15);
+    padding: 0.9rem 1.1rem;
+    color: var(--white);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    -webkit-appearance: none;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.06);
+  }
+  .form-group select option { background: var(--charcoal); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+
+  .form-submit {
+    margin-top: 0.5rem;
+    padding: 1rem 2.5rem;
+    background: var(--gold);
+    color: var(--charcoal);
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    align-self: flex-start;
+  }
+  .form-submit:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 1.75rem 5rem;
+    background: #1e1e1c;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    color: rgba(250,250,248,0.35);
+  }
+  .footer-logo span { font-style: italic; color: rgba(196,163,90,0.5); }
+  .footer-built {
+    font-size: 0.65rem;
+    color: rgba(250,250,248,0.2);
+    letter-spacing: 0.1em;
+  }
+  .footer-built a {
+    color: rgba(196,163,90,0.5);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-built a:hover { color: var(--gold); }
+  .footer-copy {
+    font-size: 0.65rem;
+    color: rgba(250,250,248,0.2);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.04); opacity: 0.7; }
+  }
+  @keyframes scrollDrop {
+    0%, 100% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+    40% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+    80% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  @media (max-width: 960px) {
+    nav { padding: 1.5rem 2rem; }
+    #hero { padding: 8rem 2rem 5rem; }
+    #about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+    .about-right { grid-template-columns: 1fr 1fr; }
+    #divisions { padding: 5rem 2rem; }
+    .divisions-grid { grid-template-columns: 1fr; }
+    #contact { padding: 5rem 2rem; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <a href="#home" class="nav-logo">Triple <span>D</span></a>
-  <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="intake.html" class="nav-cta">Start Your Project</a></li>
-  </ul>
-  <button class="nav-hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  <a href="#" class="nav-logo">Sturm <span>&</span> Róisín</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#divisions">Ventures</a>
+    <a href="#contact">Contact</a>
+    <a href="about.html">Our Story</a>
+  </div>
 </nav>
 
-<!-- MOBILE DRAWER -->
-<div class="mobile-drawer" id="mobileDrawer">
-  <a href="#services" class="drawer-link">Services</a>
-  <a href="#pricing" class="drawer-link">Pricing</a>
-  <a href="#portfolio" class="drawer-link">Portfolio</a>
-  <a href="about.html" class="drawer-link">About</a>
-  <a href="intake.html" class="drawer-cta">Start Your Project &rarr;</a>
-</div>
-
 <!-- HERO -->
-<section id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <div class="hero-badge">🌿 Nationwide · Small Town Focused</div>
-    <h1 class="hero-title">Big Online Presence<br>for <span class="accent">Small Town</span><br>Businesses</h1>
-    <p class="hero-subtitle">Delight Digital Designs builds affordable, beautiful websites for the hardworking businesses that keep small towns alive. No tech headaches — just results.</p>
-    <div class="hero-buttons">
-      <a href="#pricing" class="btn-primary">See Pricing</a>
-      <a href="intake.html" class="btn-outline">Start Your Project →</a>
-    </div>
-    <div class="hero-counter">
-      <div class="counter-icon">🤝</div>
-      <div class="counter-text">
-        <span class="counter-label" style="font-size:0.95rem; color:rgba(255,255,255,0.85);">Great support for local business</span>
-      </div>
-    </div>
-  </div>
-  <svg class="hero-wave" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 80L1440 80L1440 30C1200 70 960 10 720 40C480 70 240 10 0 30L0 80Z" fill="#f5f9f7"/>
-  </svg>
-</section>
+<section id="hero">
+  <div class="hero-bg-ornament"></div>
 
-<!-- SERVICES -->
-<section id="services">
-  <div class="section-label reveal">What We Do</div>
-  <h2 class="section-title reveal">Everything you need.<br>Nothing you don't.</h2>
-  <p class="section-sub reveal">We specialize in building websites for small businesses that need a solid online presence without the big-agency price tag.</p>
-  <div class="services-grid">
-    <div class="service-card reveal">
-      <div class="service-icon">🌐</div>
-      <h3>Website Design & Build</h3>
-      <p>Custom, mobile-friendly websites built to reflect your business's personality and convert visitors into customers.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-icon">🔧</div>
-      <h3>Monthly Maintenance</h3>
-      <p>We handle updates, security, and uptime so you can focus on running your business instead of your website.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-icon">📍</div>
-      <h3>Local SEO Optimization</h3>
-      <p>Get found on Google by people in your area searching for exactly what you offer — without expensive ad spend.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-icon">📱</div>
-      <h3>Mobile-First Design</h3>
-      <p>Every site we build looks and works great on phones, tablets, and desktops — because that's where your customers are.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-icon">✍️</div>
-      <h3>Content Updates</h3>
-      <p>Need to change your hours, add a menu, or post an announcement? We keep your site current and accurate.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-icon">📞</div>
-      <h3>Personal Support</h3>
-      <p>You'll always reach a real person who understands small-town business. No ticket queues or call centers.</p>
-    </div>
+  <p class="hero-pre">Est. 2024 &nbsp;·&nbsp; Delight, Arkansas</p>
+
+  <h1 class="hero-title">
+    Sturm <span class="amp">&</span> Róisín
+  </h1>
+
+  <div class="hero-rule"></div>
+
+  <p class="hero-tagline">Strength &amp; Grace</p>
+
+  <p class="hero-sub">A family of purposeful ventures built on the belief that great ideas, executed with care, leave a lasting mark.</p>
+
+  <div class="hero-story-link">
+    <a href="about.html">Read Our Story →</a>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Discover</span>
+    <div class="scroll-line"></div>
   </div>
 </section>
 
-<!-- PRICING -->
-<section id="pricing">
-  <div class="section-label reveal">Simple, Honest Pricing</div>
-  <h2 class="section-title reveal">Plans built for<br>Main Street budgets</h2>
-  <p class="section-sub reveal">Start with a one-time Website Build to get you live, then choose the monthly plan that fits where you are.</p>
-  <div class="pricing-note reveal">🏗️ Website Build — Starting at $399 — Your site built, launched & ready for business</div>
-  <div class="pricing-grid">
-
-    <!-- Lighthouse -->
-    <div class="pricing-card reveal">
-      <h3>🔦 Lighthouse</h3>
-      <div class="price">$19.99<span>/mo</span></div>
-      <div class="price-desc">Keeping the lights on</div>
-      <ul class="pricing-features">
-        <li>Website hosting & uptime</li>
-        <li>Custom domain upkeep</li>
-        <li>SSL security maintained</li>
-        <li>Your site stays live — we handle the rest</li>
-      </ul>
-      <a href="intake.html" class="btn-card btn-card-light">Get Started</a>
-    </div>
-
-    <!-- Sentinel (featured) -->
-    <div class="pricing-card featured reveal">
-      <div class="featured-badge">Most Popular</div>
-      <h3>⚔️ Sentinel</h3>
-      <div class="price">$49.99<span>/mo</span></div>
-      <div class="price-desc">Maintenance & steady upkeep</div>
-      <ul class="pricing-features">
-        <li>Everything in Lighthouse</li>
-        <li>Up to 2 updates per month</li>
-        <li>Critical fixes & changes</li>
-        <li>Mobile-friendly & SSL secured</li>
-        <li>Google Business integration</li>
-        <li>Social media links maintained</li>
-      </ul>
-      <a href="intake.html" class="btn-card btn-card-white">Get Started</a>
-    </div>
-
-    <!-- Guardian -->
-    <div class="pricing-card reveal">
-      <h3>🛡️ Guardian</h3>
-      <div class="price">$79.99<span>/mo</span></div>
-      <div class="price-desc">Priority support & unlimited updates</div>
-      <ul class="pricing-features">
-        <li>Everything in Sentinel</li>
-        <li>Unlimited updates</li>
-        <li>Priority response — you're first in line</li>
-        <li>Critical updates handled same day</li>
-        <li>Dedicated personal support</li>
-        <li>Need something more? We'll build a custom quote together.</li>
-      </ul>
-      <a href="intake.html" class="btn-card btn-card-sky">Get Started</a>
-    </div>
-
+<!-- ABOUT -->
+<section id="about">
+  <div>
+    <p class="about-label reveal">Who We Are</p>
+    <h2 class="about-heading reveal">
+      Built with intention.<br>
+      <em>Driven by purpose.</em>
+    </h2>
+    <p class="about-body reveal reveal-delay-1">
+      Sturm & Róisín is a parent company rooted in Delight, Arkansas — a portfolio of ventures that each carry the same core values: strength in what we build, grace in how we do it.
+    </p>
+    <p class="about-body reveal reveal-delay-1">
+      The name reflects who we are. Sturm — the drive, the momentum, the will to build something that lasts. Róisín — the care, the craft, the attention that makes the difference. Every venture under this umbrella carries both.
+    </p>
+    <a href="about.html" class="about-story-link reveal reveal-delay-2">Read the full story →</a>
   </div>
-
-  <!-- SEO Growth Sprint callout -->
-  <div class="addon-card reveal">
-    <div>
-      <h3>🔍 SEO Growth Sprint</h3>
-      <p>A focused 3-month push to get you ranking on Google and bring in customers who are already searching for you. Designed to move the needle — not run forever. Add to any plan monthly or save with a quarterly package.</p>
+  <div class="about-right reveal reveal-delay-2">
+    <div class="about-stat">
+      <div class="about-stat-num">3</div>
+      <div class="about-stat-label">Active Ventures</div>
     </div>
-    <div style="text-align:right;">
-      <div class="addon-price">$89.99<span>/mo</span></div>
-      <div style="font-size:0.85rem;opacity:0.7;margin-top:0.3rem;">or $250 for a full quarter</div>
-      <div style="font-size:0.78rem;opacity:0.55;margin-top:0.2rem;">Add to any plan</div>
+    <div class="about-stat">
+      <div class="about-stat-num">0</div>
+      <div class="about-stat-label">Coming Soon</div>
+    </div>
+    <div class="about-stat">
+      <div class="about-stat-num">AR</div>
+      <div class="about-stat-label">Proudly Local</div>
+    </div>
+    <div class="about-stat">
+      <div class="about-stat-num">'24</div>
+      <div class="about-stat-label">Year Founded</div>
     </div>
   </div>
 </section>
 
-<!-- PORTFOLIO -->
-<section id="portfolio">
-  <div class="section-label reveal">Our Work</div>
-  <h2 class="section-title reveal">Built with heart<br>for real businesses</h2>
-  <p class="section-sub reveal">We're proud to serve small towns across Arkansas and beyond. Here are some of the businesses we've helped get online.</p>
-  <div class="portfolio-grid">
-    <div class="portfolio-card reveal">
-      <div class="portfolio-thumb portfolio-thumb-city">🏛️</div>
-      <div class="portfolio-info">
-        <h3>City of Delight, Arkansas</h3>
-        <p>Municipal website for the City of Delight — news, announcements, and community resources.</p>
-        <a href="https://cityofdelight.com" target="_blank" rel="noopener" style="text-decoration:none;"><span class="portfolio-tag tag-live">Live ↗</span></a>
-      </div>
+<!-- DIVISIONS -->
+<section id="divisions">
+  <div class="divisions-header reveal">
+    <p class="section-label">Our Ventures</p>
+    <h2>A portfolio built with <em>purpose.</em></h2>
+  </div>
+
+  <div class="divisions-grid">
+
+    <div class="division-card reveal reveal-delay-1" onclick="window.open('https://www.delightdigitaldesigns.com', '_blank')" style="cursor:pointer;">
+      <div class="division-num">01</div>
+      <div class="division-icon"></div>
+      <div class="division-name">Delight Digital Designs</div>
+      <div class="division-tagline">Great Support for Your Local Business</div>
+      <p class="division-desc">Web design, digital presence, and technology support built specifically for small and local businesses. We make professional digital tools accessible — without the big-agency price tag.</p>
+      <span class="division-badge active">Active</span>
     </div>
-    <div class="portfolio-card reveal">
-      <div class="portfolio-thumb portfolio-thumb-print">🖨️</div>
-      <div class="portfolio-info">
-        <h3>Alexander Printing</h3>
-        <p>Century-old printing company's modern web presence — services, portfolio, and contact.</p>
-        <span class="portfolio-tag tag-live">Live</span>
-      </div>
+
+    <div class="division-card reveal reveal-delay-2" onclick="window.open('https://www.frameandfortuneusa.com', '_blank')" style="cursor:pointer;">
+      <div class="division-num">02</div>
+      <div class="division-icon"></div>
+      <div class="division-name">Frame & Fortune</div>
+      <div class="division-tagline">Frame What You Love</div>
+      <p class="division-desc">Premium wall art and framed print collections for the home. Curated designs that transform your walls — and the moments that matter most — into something you'll treasure.</p>
+      <span class="division-badge active">Active</span>
     </div>
-    <div class="portfolio-card reveal">
-      <div class="portfolio-thumb" style="background:linear-gradient(135deg,#7a3d1a,#bf7a2e);">🖼️</div>
-      <div class="portfolio-info">
-        <h3>Frame & Fortune</h3>
-        <p>Print-on-demand wall art brand specializing in gallery wall sets and decorative art collections.</p>
-        <a href="https://frameandfortuneusa.com" target="_blank" rel="noopener" style="text-decoration:none;"><span class="portfolio-tag tag-live">Live ↗</span></a>
-      </div>
+
+    <div class="division-card reveal reveal-delay-3" onclick="window.open('https://cjgibbo.github.io/Sturm-Roisin-Publishing/', '_blank')" style="cursor:pointer;">
+      <div class="division-num">03</div>
+      <div class="division-icon"></div>
+      <div class="division-name">Sturm & Róisín Publishing</div>
+      <div class="division-tagline">Where Words Find Their Legacy</div>
+      <p class="division-desc">A publishing venture taking shape under the Sturm & Róisín umbrella — home to a growing family of imprints. Details to follow, built with the same care and intention as everything else we do.</p>
+      <span class="division-badge active">Active</span>
     </div>
-    <div class="portfolio-card reveal">
-      <div class="portfolio-thumb" style="background:linear-gradient(135deg,#2e1a5c,#6e3d8b);">⚜️</div>
-      <div class="portfolio-info">
-        <h3>Sturm & Róisín LLC</h3>
-        <p>Home base for a multi-venture Arkansas entrepreneur — the parent company behind Triple D and more.</p>
-        <a href="https://sturmroisin.com" target="_blank" rel="noopener" style="text-decoration:none;"><span class="portfolio-tag tag-live">Live ↗</span></a>
-      </div>
-    </div>
+
   </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="contact-layout">
+  <div class="contact-inner">
     <div>
-      <div class="section-label reveal">Let's Talk</div>
-      <h2 class="section-title reveal">Ready to get<br>your business online?</h2>
-      <p class="section-sub reveal">Fill out the form and we'll be in touch within one business day. No pressure, no jargon — just a friendly conversation about your goals.</p>
-      <div class="contact-info reveal">
-        <h3>Why Triple D?</h3>
-        <p>We're not a big faceless agency. We're local entrepreneurs who understand what it means to run a small business. We treat your business like it's our own.</p>
-        <div class="contact-detail"><span class="icon">📍</span><span>Delight, Arkansas</span></div>
-        <div class="contact-detail"><span class="icon">🌎</span><span>Serving businesses nationwide</span></div>
-        <div class="contact-detail"><span class="icon">⚡</span><span>Fast turnaround, personal service</span></div>
-      </div>
+      <p class="contact-label reveal">Get In Touch</p>
+      <h2 class="contact-heading reveal">
+        Let's start a<br><em>conversation.</em>
+      </h2>
+      <p class="contact-text reveal">Whether you're interested in working with one of our ventures or just want to know more about what we're building — we'd love to hear from you.</p>
     </div>
-    <div class="reveal">
-      <form action="https://formspree.io/f/xaqdrwro" method="POST" id="contactForm">
-        <div class="form-row">
-          <input type="text" name="name" placeholder="Your Name" required />
-          <input type="text" name="business" placeholder="Business Name" />
+
+    <form class="contact-form reveal" action="https://formspree.io/f/xdalqoae" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Chris">
         </div>
-        <input type="email" name="email" placeholder="Email Address" required />
-        <input type="tel" name="phone" placeholder="Phone Number (optional)" />
-        <select name="plan">
-          <option value="" disabled selected>Interested in which plan?</option>
-          <option value="lighthouse">🔦 Lighthouse — $19.99/mo (hosting only)</option>
-          <option value="sentinel">⚔️ Sentinel — $49.99/mo (maintenance & updates)</option>
-          <option value="guardian">🛡️ Guardian — $79.99/mo (priority & unlimited)</option>
-          <option value="seo">🔍 SEO Growth Sprint — $89.99/mo or $250/quarter</option>
-          <option value="unsure">Not sure yet — just exploring</option>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Sturm">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="hello@example.com">
+      </div>
+      <div class="form-group">
+        <label>I'm interested in</label>
+        <select>
+          <option value="">Select a venture...</option>
+          <option>Delight Digital Designs</option>
+          <option>Frame & Fortune</option>
+          <option>General Inquiry</option>
         </select>
-        <textarea name="message" placeholder="Tell us a little about your business and what you're looking for..."></textarea>
-        <button type="submit" class="btn-submit">Send Message →</button>
-        <div class="form-success" id="formSuccess">✅ Message sent! We'll be in touch soon.</div>
-      </form>
-    </div>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell us what's on your mind..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Message</button>
+    </form>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <p style="margin-bottom:0.4rem;">
-    <strong>Delight Digital Designs</strong> — Big online presence for small town businesses.
-  </p>
-  <p>
-    <a href="https://delightdigitaldesigns.com">delightdigitaldesigns.com</a> &nbsp;·&nbsp;
-    <a href="https://dddwebsites.com">dddwebsites.com</a>
-  </p>
-  <p style="margin-top:0.8rem; font-size:0.8rem; opacity:0.55;">
-    A division of Sturm &amp; Róisín LLC &nbsp;·&nbsp; © 2025 Delight Digital Designs. All rights reserved.
-  </p>
+  <div class="footer-logo">Sturm <span>&</span> Róisín, LLC</div>
+  <div class="footer-built">Built by <a href="https://www.delightdigitaldesigns.com" target="_blank">Delight Digital Designs</a></div>
+  <div class="footer-copy">© 2026 All rights reserved</div>
 </footer>
 
 <script>
-
+  // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.12 });
   reveals.forEach(el => observer.observe(el));
-
-  // ─── FORMSPREE AJAX SUBMIT ───
-  const form = document.getElementById('contactForm');
-  const success = document.getElementById('formSuccess');
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const btn = form.querySelector('.btn-submit');
-    btn.textContent = 'Sending...';
-    btn.disabled = true;
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        form.reset();
-        success.style.display = 'block';
-        btn.style.display = 'none';
-      } else {
-        btn.textContent = 'Send Message →';
-        btn.disabled = false;
-        alert('Hmm, something went wrong. Try emailing us directly!');
-      }
-    } catch {
-      btn.textContent = 'Send Message →';
-      btn.disabled = false;
-    }
-  });
-
-  // ─── HAMBURGER MENU ───
-  const hamburger = document.getElementById('hamburger');
-  const drawer = document.getElementById('mobileDrawer');
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
-    drawer.classList.toggle('open');
-  });
-  // Close drawer when any drawer link is clicked
-  drawer.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.classList.remove('open');
-      drawer.classList.remove('open');
-    });
-  });
 </script>
 </body>
 </html>
