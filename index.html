@@ -215,6 +215,19 @@
     margin-bottom: 1.25rem;
   }
 
+  .about-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 400;
+    transition: color 0.3s, letter-spacing 0.3s;
+  }
+  .about-link:hover { color: var(--gold-light); letter-spacing: 0.28em; }
+
   .about-right {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -277,7 +290,7 @@
 
   .divisions-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
   }
 
@@ -525,6 +538,7 @@
     <a href="#about">About</a>
     <a href="#divisions">Ventures</a>
     <a href="#contact">Contact</a>
+    <a href="about.html">Our Story</a>
   </div>
 </nav>
 
@@ -547,14 +561,15 @@
     <h2 class="about-heading reveal">Built with intention.<br><em>Driven by purpose.</em></h2>
     <p class="about-body reveal reveal-delay-1">Sturm & Róisín is a parent company rooted in Delight, Arkansas — a portfolio of ventures that each carry the same core values: strength in what we build, grace in how we do it.</p>
     <p class="about-body reveal reveal-delay-1">The name reflects who we are. Sturm — the drive, the momentum, the will to build something that lasts. Róisín — the care, the craft, the attention that makes the difference. Every venture under this umbrella carries both.</p>
+    <a href="about.html" class="about-link reveal reveal-delay-2">Our Story &rarr;</a>
   </div>
   <div class="about-right reveal reveal-delay-2">
     <div class="about-stat">
-      <div class="about-stat-num">3</div>
+      <div class="about-stat-num">4</div>
       <div class="about-stat-label">Active Ventures</div>
     </div>
     <div class="about-stat">
-      <div class="about-stat-num">0</div>
+      <div class="about-stat-num">1</div>
       <div class="about-stat-label">Coming Soon</div>
     </div>
     <div class="about-stat">
@@ -603,6 +618,15 @@
       <span class="division-badge active">Active</span>
     </div>
 
+    <div class="division-card reveal reveal-delay-4" onclick="window.open('https://www.stillwontquit.com', '_blank')" style="cursor:pointer;">
+      <div class="division-num">04</div>
+      <div class="division-icon"></div>
+      <div class="division-name">Still Won't Quit</div>
+      <div class="division-tagline">A Resource for Parents Who Are Still Showing Up</div>
+      <p class="division-desc">A resource platform for parents of kids with defiance-based behavioral challenges — built from the inside out, not handed down from a professional's office.</p>
+      <span class="division-badge active">Active</span>
+    </div>
+
   </div>
 </section>
 
@@ -635,6 +659,8 @@
           <option value="">Select a venture...</option>
           <option>Delight Digital Designs</option>
           <option>Frame & Fortune</option>
+          <option>Sturm & Róisín Publishing</option>
+          <option>Still Won't Quit</option>
           <option>General Inquiry</option>
         </select>
       </div>
