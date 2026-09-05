@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S&R Call Record</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #008080;
+    font-family: 'MS Sans Serif', 'Arial', sans-serif;
+    font-size: 12px;
+    color: #000;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .window {
+    background: #C0C0C0;
+    border-top: 2px solid #fff; border-left: 2px solid #fff;
+    border-right: 2px solid #808080; border-bottom: 2px solid #808080;
+    box-shadow: 1px 1px 0 #000;
+    width: 640px; max-width: 100%;
+  }
+
+  .title-bar {
+    background: linear-gradient(90deg, #000080, #1084d0);
+    color: #fff; font-weight: bold; font-size: 13px;
+    padding: 3px 4px;
+    display: flex; justify-content: space-between; align-items: center;
+    user-select: none;
+  }
+
+  .title-bar-text { padding-left: 2px; letter-spacing: 0.3px; }
+  .title-bar-controls { display: flex; gap: 2px; }
+
+  .title-bar-controls button {
+    width: 16px; height: 14px; background: #C0C0C0;
+    border-top: 1px solid #fff; border-left: 1px solid #fff;
+    border-right: 1px solid #808080; border-bottom: 1px solid #808080;
+    font-size: 8px; line-height: 1; cursor: default;
+    display: flex; align-items: center; justify-content: center;
+    font-family: inherit; padding: 0;
+  }
+
+  .window-body { padding: 8px; }
+
+  .group-box {
+    border: 1px solid #808080;
+    border-right-color: #fff; border-bottom-color: #fff;
+    padding: 12px 10px 10px; margin-bottom: 8px;
+  }
+
+  .group-box legend {
+    background: #C0C0C0; padding: 0 4px;
+    font-size: 12px; color: #000080; font-weight: bold;
+  }
+
+  .form-row {
+    display: flex; align-items: center;
+    margin-bottom: 6px; gap: 6px;
+  }
+
+  .form-row label {
+    width: 160px; min-width: 160px;
+    text-align: right; padding-right: 6px; font-size: 11px;
+  }
+
+  .form-row input[type="text"],
+  .form-row input[type="tel"],
+  .form-row input[type="email"],
+  .form-row input[type="number"],
+  .form-row select,
+  .form-row textarea {
+    background: #fff;
+    border-top: 1px solid #808080; border-left: 1px solid #808080;
+    border-right: 1px solid #fff; border-bottom: 1px solid #fff;
+    box-shadow: inset 1px 1px 0 #404040;
+    padding: 2px 4px;
+    font-family: 'MS Sans Serif', 'Arial', sans-serif;
+    font-size: 12px; color: #000; flex: 1;
+  }
+
+  .form-row textarea { height: 60px; resize: vertical; }
+
+  .form-row-inline {
+    display: flex; align-items: center; gap: 4px; flex: 1;
+  }
+  .form-row-inline label {
+    width: auto; min-width: auto; text-align: left; padding-right: 0; font-size: 11px;
+  }
+
+  .option-row {
+    display: flex; align-items: center; margin-bottom: 6px; gap: 6px;
+  }
+  .option-row .option-label {
+    width: 160px; min-width: 160px;
+    text-align: right; padding-right: 6px; font-size: 11px;
+  }
+  .option-group { display: flex; gap: 12px; align-items: center; }
+  .option-group label {
+    display: flex; align-items: center; gap: 3px;
+    font-size: 11px; cursor: default;
+    width: auto; min-width: auto; text-align: left; padding: 0;
+  }
+
+  /* Calc rows */
+  .calc-row {
+    display: flex; align-items: center; margin-bottom: 6px; gap: 6px;
+  }
+  .calc-row .calc-label {
+    width: 160px; min-width: 160px;
+    text-align: right; padding-right: 6px;
+    font-size: 11px; color: #808080;
+  }
+  .calc-value {
+    font-size: 12px; font-weight: bold; color: #000080;
+    background: #C0C0C0;
+    border-top: 1px solid #808080; border-left: 1px solid #808080;
+    border-right: 1px solid #fff; border-bottom: 1px solid #fff;
+    padding: 2px 6px; min-width: 100px;
+  }
+
+  /* Lookup bar */
+  .lookup-bar {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 8px; padding: 6px 8px;
+    background: #C0C0C0;
+    border: 1px solid #808080;
+    border-right-color: #fff; border-bottom-color: #fff;
+  }
+  .lookup-bar label { font-size: 11px; font-weight: bold; color: #000080; }
+  .lookup-bar input {
+    background: #fff;
+    border-top: 1px solid #808080; border-left: 1px solid #808080;
+    border-right: 1px solid #fff; border-bottom: 1px solid #fff;
+    box-shadow: inset 1px 1px 0 #404040;
+    padding: 2px 4px; font-family: 'MS Sans Serif', 'Arial', sans-serif;
+    font-size: 12px; flex: 1;
+  }
+  .lookup-status { font-size: 11px; color: #808080; margin-left: 4px; font-style: italic; }
+  .lookup-status.found { color: #008000; font-style: normal; }
+  .lookup-status.not-found { color: #800000; font-style: normal; }
+
+  /* Collapsible economics */
+  .econ-toggle {
+    display: flex; align-items: center; gap: 6px; cursor: default;
+    user-select: none; margin-bottom: 0;
+  }
+  .econ-toggle .arrow {
+    font-size: 10px; width: 16px; text-align: center;
+    background: #C0C0C0;
+    border-top: 1px solid #fff; border-left: 1px solid #fff;
+    border-right: 1px solid #808080; border-bottom: 1px solid #808080;
+    padding: 0 2px; line-height: 14px;
+  }
+  .econ-body { display: none; margin-top: 8px; }
+  .econ-body.open { display: block; }
+
+  /* Breakdown panel inside economics */
+  .econ-breakdown {
+    background: #fff;
+    border-top: 1px solid #808080; border-left: 1px solid #808080;
+    border-right: 1px solid #fff; border-bottom: 1px solid #fff;
+    box-shadow: inset 1px 1px 0 #404040;
+    padding: 8px 10px; margin-top: 8px;
+  }
+  .econ-breakdown-title {
+    font-size: 11px; font-weight: bold; color: #000080;
+    border-bottom: 1px solid #808080; padding-bottom: 4px; margin-bottom: 6px;
+  }
+  .econ-line {
+    display: flex; justify-content: space-between;
+    font-size: 11px; padding: 2px 0; color: #404040;
+  }
+  .econ-line.plus { color: #000; }
+  .econ-line.total {
+    border-top: 1px solid #808080; margin-top: 4px; padding-top: 6px;
+    color: #000; font-weight: bold; font-size: 12px;
+  }
+  .econ-line .num { font-family: 'Courier New', monospace; }
+  .econ-line .num.good { color: #008000; font-weight: bold; }
+  .econ-line .num.bad { color: #800000; font-weight: bold; }
+
+  .econ-callout {
+    background: #fff;
+    border: 1px dashed #000080; padding: 6px 10px; margin-top: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .econ-callout .lbl { font-size: 10px; color: #808080; text-transform: uppercase; letter-spacing: 0.5px; }
+  .econ-callout .amt { font-size: 14px; font-weight: bold; color: #000080; font-family: 'Courier New', monospace; }
+  .econ-callout .sub { font-size: 10px; color: #808080; }
+
+  .econ-flags { margin-top: 8px; font-size: 11px; }
+  .econ-flag { padding: 3px 0; display: flex; gap: 6px; line-height: 1.4; }
+  .econ-flag.warn { color: #808000; }
+  .econ-flag.bad { color: #800000; }
+  .econ-flag.good { color: #008000; }
+  .econ-flag .dot {
+    flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; margin-top: 5px;
+  }
+
+  /* Status bar */
+  .status-bar {
+    border-top: 1px solid #808080;
+    display: flex; gap: 2px; padding: 2px 4px; margin-top: 4px;
+  }
+  .status-bar-field {
+    border-top: 1px solid #808080; border-left: 1px solid #808080;
+    border-right: 1px solid #fff; border-bottom: 1px solid #fff;
+    padding: 1px 6px; font-size: 11px; flex: 1;
+  }
+  .status-bar-field.status-id { flex: none; width: 160px; }
+
+  /* Buttons */
+  .btn-row {
+    display: flex; justify-content: center;
+    gap: 8px; margin-top: 10px; padding: 6px 0;
+  }
+  .win-btn {
+    background: #C0C0C0;
+    border-top: 2px solid #fff; border-left: 2px solid #fff;
+    border-right: 2px solid #808080; border-bottom: 2px solid #808080;
+    box-shadow: 1px 1px 0 #000;
+    padding: 4px 20px;
+    font-family: 'MS Sans Serif', 'Arial', sans-serif;
+    font-size: 12px; cursor: default; min-width: 100px;
+  }
+  .win-btn:active {
+    border-top: 2px solid #808080; border-left: 2px solid #808080;
+    border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+    box-shadow: none; padding: 5px 19px 3px 21px;
+  }
+  .win-btn.primary { outline: 1px dotted #000; outline-offset: -4px; }
+  .win-btn.finish { color: #000080; font-weight: bold; }
+
+  /* Dialogs */
+  .dialog-overlay {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3); z-index: 100;
+    justify-content: center; align-items: center;
+  }
+  .dialog-overlay.active { display: flex; }
+  .dialog {
+    background: #C0C0C0;
+    border-top: 2px solid #fff; border-left: 2px solid #fff;
+    border-right: 2px solid #808080; border-bottom: 2px solid #808080;
+    box-shadow: 2px 2px 0 #000; width: 340px; max-width: 90%;
+  }
+  .dialog .title-bar { font-size: 12px; }
+  .dialog-body { padding: 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .dialog-icon { font-size: 32px; line-height: 1; min-width: 32px; }
+  .dialog-text { font-size: 12px; line-height: 1.5; padding-top: 4px; }
+  .dialog .btn-row { padding-bottom: 12px; }
+
+  body.submitting, body.submitting * { cursor: wait !important; }
+
+  @media (max-width: 640px) {
+    body { padding: 0; }
+    .window { width: 100%; border: none; box-shadow: none; }
+    .form-row, .option-row, .calc-row { flex-direction: column; align-items: flex-start; }
+    .form-row label, .option-row .option-label, .calc-row .calc-label {
+      width: 100%; text-align: left; padding-right: 0; margin-bottom: 2px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="window">
+  <div class="title-bar">
+    <span class="title-bar-text">📞 S&R Publishing — Call Record v1.0</span>
+    <div class="title-bar-controls">
+      <button aria-label="Minimize">_</button>
+      <button aria-label="Maximize">□</button>
+      <button aria-label="Close">✕</button>
+    </div>
+  </div>
+
+  <div class="window-body">
+
+    <!-- LOOKUP -->
+    <div class="lookup-bar">
+      <label for="lookupName">🔍 Returning Caller?</label>
+      <input type="text" id="lookupName" placeholder="Type a name and hit Look Up">
+      <button class="win-btn" onclick="lookupCaller()" style="min-width:80px;">Look Up</button>
+      <span class="lookup-status" id="lookupStatus"></span>
+    </div>
+
+    <!-- CONTACT INFO -->
+    <fieldset class="group-box">
+      <legend>Contact Information</legend>
+      <div class="form-row">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName">
+      </div>
+      <div class="form-row">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName">
+      </div>
+      <div class="form-row">
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone">
+      </div>
+      <div class="form-row">
+        <label for="email">Email:</label>
+        <input type="email" id="email">
+      </div>
+      <div class="form-row">
+        <label for="heardAbout">How'd they hear about S&R:</label>
+        <input type="text" id="heardAbout">
+      </div>
+    </fieldset>
+
+    <!-- THE BOOK -->
+    <fieldset class="group-box">
+      <legend>The Book</legend>
+      <div class="form-row">
+        <label for="genre">Genre / Imprint Fit:</label>
+        <input type="text" id="genre">
+      </div>
+      <div class="option-row">
+        <span class="option-label">Manuscript Status:</span>
+        <div class="option-group">
+          <label><input type="radio" name="msStatus" value="Finished"> Finished</label>
+          <label><input type="radio" name="msStatus" value="In Progress"> In Progress</label>
+          <label><input type="radio" name="msStatus" value="Idea"> Idea</label>
+        </div>
+      </div>
+      <div class="option-row">
+        <span class="option-label">Published Before:</span>
+        <div class="option-group">
+          <label><input type="radio" name="pubBefore" value="Yes"> Yes</label>
+          <label><input type="radio" name="pubBefore" value="No"> No</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="bookSize">Desired Book Size:</label>
+        <input type="text" id="bookSize" placeholder="e.g. 6x9, 5.5x8.5">
+      </div>
+      <div class="form-row">
+        <label for="pageCount">Approx. Page Count:</label>
+        <input type="number" id="pageCount">
+      </div>
+      <div class="option-row">
+        <span class="option-label">Format:</span>
+        <div class="option-group">
+          <label><input type="checkbox" name="format" value="Paperback"> Paperback</label>
+          <label><input type="checkbox" name="format" value="Hardcover"> Hardcover</label>
+          <label><input type="checkbox" name="format" value="Ebook"> Ebook</label>
+        </div>
+      </div>
+      <div class="option-row">
+        <span class="option-label">Cover Art:</span>
+        <div class="option-group">
+          <label><input type="radio" name="coverArt" value="Have it"> Have it</label>
+          <label><input type="radio" name="coverArt" value="Need help"> Need help</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- MONEY -->
+    <fieldset class="group-box">
+      <legend>Pricing &amp; Expectations</legend>
+      <div class="option-row">
+        <span class="option-label">Thought about sale price?</span>
+        <div class="option-group">
+          <label><input type="radio" name="salePrice" value="Yes"> Yes</label>
+          <label><input type="radio" name="salePrice" value="No"> No</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="salePriceAmt">If yes, how much? $</label>
+        <input type="text" id="salePriceAmt" style="width:80px; flex:none;" oninput="updateCalcs()">
+      </div>
+      <div class="option-row">
+        <span class="option-label">Idea of profit per book?</span>
+        <div class="option-group">
+          <label><input type="radio" name="profitIdea" value="Yes"> Yes</label>
+          <label><input type="radio" name="profitIdea" value="No"> No</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="profitAmt">If yes, how much? $</label>
+        <input type="text" id="profitAmt" style="width:80px; flex:none;">
+      </div>
+
+      <div style="border-top:1px solid #808080; margin:8px 0 6px; border-bottom:1px solid #fff;"></div>
+
+      <div class="form-row">
+        <label for="quotedPrice">Quoted print price: $</label>
+        <div class="form-row-inline">
+          <input type="text" id="quotedPrice" placeholder="3.65" style="width:70px;" oninput="updateCalcs()">
+          <label for="quotedQty">per book @</label>
+          <input type="number" id="quotedQty" placeholder="100" style="width:70px;" oninput="updateCalcs()">
+          <span style="font-size:11px;">copies</span>
+        </div>
+      </div>
+
+      <!-- Quick totals -->
+      <div class="calc-row">
+        <span class="calc-label">Total print cost:</span>
+        <span class="calc-value" id="calcTotalPrint">—</span>
+      </div>
+      <div class="calc-row">
+        <span class="calc-label">Profit per book (sale − print):</span>
+        <span class="calc-value" id="calcProfitPerBook">—</span>
+      </div>
+      <div class="calc-row">
+        <span class="calc-label">Total revenue (all copies):</span>
+        <span class="calc-value" id="calcTotalRevenue">—</span>
+      </div>
+      <div class="calc-row">
+        <span class="calc-label">Total profit (all copies):</span>
+        <span class="calc-value" id="calcTotalProfit">—</span>
+      </div>
+    </fieldset>
+
+    <!-- READINESS -->
+    <fieldset class="group-box">
+      <legend>Readiness &amp; Next Steps</legend>
+      <div class="option-row">
+        <span class="option-label">Willing to start slow?</span>
+        <div class="option-group">
+          <label><input type="radio" name="startSlow" value="Yes"> Yes</label>
+          <label><input type="radio" name="startSlow" value="No"> No</label>
+        </div>
+      </div>
+      <div class="option-row">
+        <span class="option-label">Want a getting started guide?</span>
+        <div class="option-group">
+          <label><input type="radio" name="guide" value="Yes"> Yes</label>
+          <label><input type="radio" name="guide" value="No"> No</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="timeline">Timeline:</label>
+        <input type="text" id="timeline" placeholder="e.g. By Christmas, no rush">
+      </div>
+    </fieldset>
+
+    <!-- NOTES -->
+    <fieldset class="group-box">
+      <legend>Notes</legend>
+      <div class="form-row">
+        <label for="notes" style="width:0; min-width:0; padding:0;"></label>
+        <textarea id="notes" style="width:100%;"></textarea>
+      </div>
+    </fieldset>
+
+    <!-- ========== BOOK ECONOMICS (COLLAPSIBLE) ========== -->
+    <fieldset class="group-box">
+      <legend>
+        <span class="econ-toggle" onclick="toggleEcon()">
+          <span class="arrow" id="econArrow">►</span>
+          Book Economics Calculator
+        </span>
+      </legend>
+      <div class="econ-body" id="econBody">
+        <div style="font-size:10px; color:#808080; margin-bottom:8px; font-style:italic;">
+          Pulls print cost &amp; retail from fields above. Adjust fees below as needed.
+        </div>
+
+        <div class="form-row">
+          <label for="econPackaging">Packaging / Book: $</label>
+          <input type="number" id="econPackaging" value="0.50" step="0.10" style="width:70px; flex:none;" oninput="updateEcon()">
+        </div>
+        <div class="form-row">
+          <label for="econSetup">Setup Cost (one-time): $</label>
+          <input type="number" id="econSetup" value="0" step="25" style="width:70px; flex:none;" oninput="updateEcon()">
+        </div>
+        <div class="form-row">
+          <label for="econAmortize">Amortize Over # Books:</label>
+          <input type="number" id="econAmortize" value="100" step="10" style="width:70px; flex:none;" oninput="updateEcon()">
+        </div>
+
+        <div style="border-top:1px solid #808080; margin:6px 0; border-bottom:1px solid #fff;"></div>
+
+        <div class="form-row">
+          <label for="econPlatformPct">Platform Fee (%):</label>
+          <input type="number" id="econPlatformPct" value="28" step="1" style="width:60px; flex:none;" oninput="updateEcon()">
+        </div>
+        <div class="form-row">
+          <label for="econProcessPct">Processing Rate (%):</label>
+          <input type="number" id="econProcessPct" value="2.9" step="0.1" style="width:60px; flex:none;" oninput="updateEcon()">
+        </div>
+        <div class="form-row">
+          <label for="econTxnFee">Per-Transaction Fee: $</label>
+          <input type="number" id="econTxnFee" value="0.80" step="0.10" style="width:60px; flex:none;" oninput="updateEcon()">
+        </div>
+        <div style="font-size:10px; color:#808080; font-style:italic; margin: 2px 0 6px 166px;">
+          Stripe: 2.9% + $0.30/txn + $0.50 tax calc = $0.80 flat
+        </div>
+        <div class="form-row">
+          <label for="econTarget">Target Profit / Book: $</label>
+          <input type="number" id="econTarget" value="3.00" step="0.50" style="width:60px; flex:none;" oninput="updateEcon()">
+        </div>
+
+        <!-- RESULTS -->
+        <div class="econ-breakdown">
+          <div class="econ-breakdown-title">Per-Book Economics</div>
+          <div class="econ-line plus"><span>Retail Price</span><span class="num" id="eR_retail">$0.00</span></div>
+          <div class="econ-line"><span>− Platform Fee (<span id="eR_platPct">28</span>%)</span><span class="num" id="eR_platFee">$0.00</span></div>
+          <div class="econ-line"><span>− Processing (<span id="eR_procPct">2.9</span>%)</span><span class="num" id="eR_procFee">$0.00</span></div>
+          <div class="econ-line"><span>− Transaction Fee</span><span class="num" id="eR_txnFee">$0.00</span></div>
+          <div style="border-top:1px solid #C0C0C0; margin:4px 0;"></div>
+          <div class="econ-line"><span>Author Gross</span><span class="num" id="eR_gross">$0.00</span></div>
+          <div class="econ-line"><span>− Print Cost</span><span class="num" id="eR_print">$0.00</span></div>
+          <div class="econ-line"><span>− Packaging</span><span class="num" id="eR_pack">$0.00</span></div>
+          <div class="econ-line"><span>− Amortized Setup</span><span class="num" id="eR_setup">$0.00</span></div>
+          <div class="econ-line total"><span>Author Net / Book</span><span class="num" id="eR_net">$0.00</span></div>
+          <div class="econ-line" style="border:none; padding-top:2px;">
+            <span style="font-size:10px; color:#808080;">Margin</span>
+            <span class="num" id="eR_margin" style="font-size:11px; color:#808080;">—</span>
+          </div>
+        </div>
+
+        <div class="econ-callout">
+          <div>
+            <div class="lbl">Break-Even Retail</div>
+            <div class="sub">Author makes $0</div>
+          </div>
+          <div class="amt" id="eR_breakeven">$0.00</div>
+        </div>
+
+        <div class="econ-callout" style="margin-top:4px;">
+          <div>
+            <div class="lbl">Min Retail for Target</div>
+            <div class="sub" id="eR_minSub">To hit target profit</div>
+          </div>
+          <div class="amt" id="eR_minRetail">$0.00</div>
+        </div>
+
+        <div class="econ-flags" id="econFlags"></div>
+      </div>
+    </fieldset>
+
+    <!-- BUTTONS -->
+    <div class="btn-row">
+      <button class="win-btn" onclick="clearForm()">Clear Form</button>
+      <button class="win-btn finish primary" onclick="submitRecord()">☎ End Call / Finish</button>
+    </div>
+
+  </div>
+
+  <div class="status-bar">
+    <div class="status-bar-field" id="statusMsg">Ready</div>
+    <div class="status-bar-field status-id" id="statusTime"></div>
+  </div>
+</div>
+
+<!-- Confirmation dialog -->
+<div class="dialog-overlay" id="dialogOverlay">
+  <div class="dialog">
+    <div class="title-bar"><span class="title-bar-text">Call Record</span></div>
+    <div class="dialog-body">
+      <div class="dialog-icon">✅</div>
+      <div class="dialog-text" id="dialogText">Record saved successfully.</div>
+    </div>
+    <div class="btn-row">
+      <button class="win-btn primary" onclick="closeDialog()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- Error dialog -->
+<div class="dialog-overlay" id="errorOverlay">
+  <div class="dialog">
+    <div class="title-bar"><span class="title-bar-text">Error</span></div>
+    <div class="dialog-body">
+      <div class="dialog-icon">⚠️</div>
+      <div class="dialog-text" id="errorText">Something went wrong.</div>
+    </div>
+    <div class="btn-row">
+      <button class="win-btn primary" onclick="closeError()">OK</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURATION
+// ============================================================
+const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+// Clock
+function updateClock() {
+  document.getElementById('statusTime').textContent = new Date().toLocaleString();
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ---- TOGGLE ECONOMICS ----
+function toggleEcon() {
+  const body = document.getElementById('econBody');
+  const arrow = document.getElementById('econArrow');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  arrow.textContent = isOpen ? '►' : '▼';
+  if (!isOpen) updateEcon();
+}
+
+// ---- QUICK CALCS (Pricing section) ----
+function updateCalcs() {
+  const price = parseFloat(document.getElementById('quotedPrice').value) || 0;
+  const qty = parseInt(document.getElementById('quotedQty').value) || 0;
+  const sale = parseFloat(document.getElementById('salePriceAmt').value) || 0;
+
+  document.getElementById('calcTotalPrint').textContent = (price > 0 && qty > 0) ? '$' + (price * qty).toFixed(2) : '—';
+
+  if (sale > 0 && price > 0) {
+    const p = sale - price;
+    document.getElementById('calcProfitPerBook').textContent = '$' + p.toFixed(2);
+    document.getElementById('calcProfitPerBook').style.color = p >= 0 ? '#008000' : '#800000';
+  } else {
+    document.getElementById('calcProfitPerBook').textContent = '—';
+    document.getElementById('calcProfitPerBook').style.color = '#000080';
+  }
+
+  document.getElementById('calcTotalRevenue').textContent = (sale > 0 && qty > 0) ? '$' + (sale * qty).toFixed(2) : '—';
+
+  if (sale > 0 && price > 0 && qty > 0) {
+    const tp = (sale - price) * qty;
+    document.getElementById('calcTotalProfit').textContent = '$' + tp.toFixed(2);
+    document.getElementById('calcTotalProfit').style.color = tp >= 0 ? '#008000' : '#800000';
+  } else {
+    document.getElementById('calcTotalProfit').textContent = '—';
+    document.getElementById('calcTotalProfit').style.color = '#000080';
+  }
+
+  // Also refresh economics if open
+  if (document.getElementById('econBody').classList.contains('open')) updateEcon();
+}
+
+// ---- FULL ECONOMICS ----
+const fmt = (n) => (!isFinite(n) ? '$—' : (n < 0 ? '-' : '') + '$' + Math.abs(n).toFixed(2));
+
+function updateEcon() {
+  const retail      = parseFloat(document.getElementById('salePriceAmt').value) || 0;
+  const printCost   = parseFloat(document.getElementById('quotedPrice').value) || 0;
+  const packaging   = parseFloat(document.getElementById('econPackaging').value) || 0;
+  const setup       = parseFloat(document.getElementById('econSetup').value) || 0;
+  const amortize    = parseInt(document.getElementById('econAmortize').value) || 0;
+  const platPct     = (parseFloat(document.getElementById('econPlatformPct').value) || 0) / 100;
+  const procPct     = (parseFloat(document.getElementById('econProcessPct').value) || 0) / 100;
+  const txnFee      = parseFloat(document.getElementById('econTxnFee').value) || 0;
+  const target      = parseFloat(document.getElementById('econTarget').value) || 0;
+
+  const platFee   = retail * platPct;
+  const procFee   = retail * procPct;
+  const gross     = retail - platFee - procFee - txnFee;
+  const amortSetup = amortize > 0 ? setup / amortize : 0;
+  const net       = gross - printCost - packaging - amortSetup;
+  const margin    = retail > 0 ? net / retail : 0;
+
+  document.getElementById('eR_platPct').textContent = (platPct * 100).toFixed(0);
+  document.getElementById('eR_procPct').textContent = (procPct * 100).toFixed(1);
+  document.getElementById('eR_retail').textContent = fmt(retail);
+  document.getElementById('eR_platFee').textContent = fmt(platFee);
+  document.getElementById('eR_procFee').textContent = fmt(procFee);
+  document.getElementById('eR_txnFee').textContent = fmt(txnFee);
+  document.getElementById('eR_gross').textContent = fmt(gross);
+  document.getElementById('eR_print').textContent = fmt(printCost);
+  document.getElementById('eR_pack').textContent = fmt(packaging);
+  document.getElementById('eR_setup').textContent = fmt(amortSetup);
+
+  const netEl = document.getElementById('eR_net');
+  netEl.textContent = fmt(net);
+  netEl.className = 'num ' + (net > 1 ? 'good' : net < 0 ? 'bad' : '');
+
+  document.getElementById('eR_margin').textContent = retail > 0 ? (margin * 100).toFixed(1) + '%' : '—';
+
+  // Break-even
+  const netFraction = 1 - platPct - procPct;
+  const costs = printCost + packaging + amortSetup + txnFee;
+  const breakeven = netFraction > 0 ? costs / netFraction : NaN;
+  document.getElementById('eR_breakeven').textContent = fmt(breakeven);
+
+  // Min retail for target
+  const minRetail = netFraction > 0 ? (target + costs) / netFraction : NaN;
+  document.getElementById('eR_minRetail').textContent = fmt(minRetail);
+  document.getElementById('eR_minSub').textContent = 'To net ' + fmt(target) + '/book';
+
+  // Flags
+  const flags = [];
+  if (retail > 0 && net < 0)
+    flags.push({t:'bad', m:'Author loses ' + fmt(-net) + '/book at this retail.'});
+  if (retail > 0 && net >= 0 && net < 1)
+    flags.push({t:'warn', m:'Author profit is only ' + fmt(net) + '/book — too thin.'});
+  if (retail > 0 && printCost / retail > 0.50)
+    flags.push({t:'warn', m:'Print cost is ' + ((printCost/retail)*100).toFixed(0) + '% of retail. Dangerous.'});
+  if (retail > 0 && (printCost + platFee + procFee + txnFee) / retail > 0.80)
+    flags.push({t:'bad', m:'Print + all fees = ' + (((printCost + platFee + procFee + txnFee)/retail)*100).toFixed(0) + '% of retail. No room left.'});
+  if (isFinite(minRetail) && retail > 0 && retail < minRetail)
+    flags.push({t:'warn', m:'Need at least ' + fmt(minRetail) + ' retail to hit ' + fmt(target) + ' target.'});
+  if (retail > 0 && net >= 3)
+    flags.push({t:'good', m:'Solid margin: ' + fmt(net) + '/book.'});
+  if (setup > 0 && amortize > 0 && net > 0) {
+    const bk = Math.ceil(setup / net);
+    flags.push({t: bk <= amortize ? 'good' : 'warn',
+      m: 'Need to sell ' + bk + ' books to recover ' + fmt(setup) + ' setup. ' + (bk <= amortize ? 'Realistic.' : 'May be optimistic.')});
+  }
+
+  document.getElementById('econFlags').innerHTML = flags.map(f =>
+    '<div class="econ-flag ' + f.t + '"><div class="dot"></div><div>' + f.m + '</div></div>'
+  ).join('');
+}
+
+// ---- HELPERS ----
+function getRadioValue(name) {
+  const el = document.querySelector('input[name="' + name + '"]:checked');
+  return el ? el.value : '';
+}
+function setRadioValue(name, value) {
+  if (!value) return;
+  const el = document.querySelector('input[name="' + name + '"][value="' + value + '"]');
+  if (el) el.checked = true;
+}
+function getCheckboxValues(name) {
+  return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked'))
+    .map(cb => cb.value).join(', ');
+}
+function setCheckboxValues(name, csv) {
+  if (!csv) return;
+  csv.split(',').map(v => v.trim()).forEach(v => {
+    const el = document.querySelector('input[name="' + name + '"][value="' + v + '"]');
+    if (el) el.checked = true;
+  });
+}
+
+// ---- COLLECT DATA ----
+function collectData() {
+  return {
+    callDate:       new Date().toLocaleString(),
+    firstName:      document.getElementById('firstName').value,
+    lastName:       document.getElementById('lastName').value,
+    phone:          document.getElementById('phone').value,
+    email:          document.getElementById('email').value,
+    heardAbout:     document.getElementById('heardAbout').value,
+    genre:          document.getElementById('genre').value,
+    msStatus:       getRadioValue('msStatus'),
+    pubBefore:      getRadioValue('pubBefore'),
+    bookSize:       document.getElementById('bookSize').value,
+    pageCount:      document.getElementById('pageCount').value,
+    format:         getCheckboxValues('format'),
+    coverArt:       getRadioValue('coverArt'),
+    salePrice:      getRadioValue('salePrice'),
+    salePriceAmt:   document.getElementById('salePriceAmt').value,
+    profitIdea:     getRadioValue('profitIdea'),
+    profitAmt:      document.getElementById('profitAmt').value,
+    quotedPrice:    document.getElementById('quotedPrice').value,
+    quotedQty:      document.getElementById('quotedQty').value,
+    startSlow:      getRadioValue('startSlow'),
+    guide:          getRadioValue('guide'),
+    timeline:       document.getElementById('timeline').value,
+    notes:          document.getElementById('notes').value
+  };
+}
+
+// ---- POPULATE FROM LOOKUP ----
+function populateFromRecord(r) {
+  document.getElementById('firstName').value   = r['First Name'] || '';
+  document.getElementById('lastName').value    = r['Last Name'] || '';
+  document.getElementById('phone').value       = r['Phone'] || '';
+  document.getElementById('email').value       = r['Email'] || '';
+  document.getElementById('heardAbout').value  = r['How They Heard'] || '';
+  document.getElementById('genre').value       = r['Genre / Imprint'] || '';
+  setRadioValue('msStatus', r['Manuscript Status']);
+  setRadioValue('pubBefore', r['Published Before']);
+  document.getElementById('bookSize').value    = r['Book Size'] || '';
+  document.getElementById('pageCount').value   = r['Page Count'] || '';
+  setCheckboxValues('format', r['Format']);
+  setRadioValue('coverArt', r['Cover Art']);
+  setRadioValue('salePrice', r['Thought About Sale Price']);
+  document.getElementById('salePriceAmt').value = r['Sale Price Amount'] || '';
+  setRadioValue('profitIdea', r['Profit Idea']);
+  document.getElementById('profitAmt').value   = r['Profit Amount'] || '';
+  document.getElementById('quotedPrice').value = r['Quoted Print Price'] || '';
+  document.getElementById('quotedQty').value   = r['Quoted Quantity'] || '';
+  setRadioValue('startSlow', r['Willing to Start Slow']);
+  setRadioValue('guide', r['Wants Getting Started Guide']);
+  document.getElementById('timeline').value    = r['Timeline'] || '';
+  document.getElementById('notes').value       = r['Notes'] || '';
+  updateCalcs();
+}
+
+// ---- LOOKUP ----
+async function lookupCaller() {
+  const name = document.getElementById('lookupName').value.trim();
+  if (!name) return;
+  const statusEl = document.getElementById('lookupStatus');
+  statusEl.textContent = 'Searching...';
+  statusEl.className = 'lookup-status';
+  document.getElementById('statusMsg').textContent = 'Looking up caller...';
+  try {
+    const url = GOOGLE_SCRIPT_URL + '?search=' + encodeURIComponent(name);
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if (data.status === 'found') {
+      clearForm(true);
+      populateFromRecord(data.record);
+      statusEl.textContent = '✓ Found — ' + (data.record['First Name'] || '') + ' ' + (data.record['Last Name'] || '');
+      statusEl.className = 'lookup-status found';
+      document.getElementById('statusMsg').textContent = 'Record loaded';
+    } else {
+      statusEl.textContent = '✗ No record found for "' + name + '"';
+      statusEl.className = 'lookup-status not-found';
+      document.getElementById('statusMsg').textContent = 'No match — start a new record';
+    }
+  } catch (err) {
+    statusEl.textContent = '⚠ Lookup failed — check script URL';
+    statusEl.className = 'lookup-status not-found';
+    document.getElementById('statusMsg').textContent = 'Lookup error';
+  }
+}
+
+// ---- SUBMIT ----
+async function submitRecord() {
+  const data = collectData();
+  if (!data.firstName && !data.lastName) {
+    document.getElementById('errorText').textContent = 'Enter at least a first or last name before finishing.';
+    document.getElementById('errorOverlay').classList.add('active');
+    return;
+  }
+  document.getElementById('statusMsg').textContent = 'Saving record...';
+  document.body.classList.add('submitting');
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    document.getElementById('dialogText').textContent = 'Record saved for ' + data.firstName + ' ' + data.lastName + '.';
+    document.getElementById('dialogOverlay').classList.add('active');
+    document.getElementById('statusMsg').textContent = 'Record saved ✓';
+  } catch (err) {
+    document.getElementById('errorText').textContent = 'Could not save record. Check your connection and script URL.';
+    document.getElementById('errorOverlay').classList.add('active');
+    document.getElementById('statusMsg').textContent = 'Error saving record';
+  }
+  document.body.classList.remove('submitting');
+}
+
+// ---- CLEAR ----
+function clearForm(keepLookup) {
+  // Text inputs — but NOT the economics defaults
+  const econIds = ['econPackaging','econSetup','econAmortize','econPlatformPct','econProcessPct','econTxnFee','econTarget'];
+  document.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"], input[type="number"], textarea').forEach(el => {
+    if (keepLookup && el.id === 'lookupName') return;
+    if (econIds.includes(el.id)) return; // preserve economics defaults
+    el.value = '';
+  });
+  document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => el.checked = false);
+  updateCalcs();
+  if (!keepLookup) {
+    document.getElementById('lookupStatus').textContent = '';
+    document.getElementById('statusMsg').textContent = 'Form cleared';
+  }
+}
+
+function closeDialog() {
+  document.getElementById('dialogOverlay').classList.remove('active');
+  clearForm();
+}
+function closeError() {
+  document.getElementById('errorOverlay').classList.remove('active');
+}
+
+document.getElementById('lookupName').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') lookupCaller();
+});
+</script>
+
+</body>
+</html>
