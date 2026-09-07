@@ -450,31 +450,31 @@
       services.push(cb.value);
     });
 
-    const data = {
-      timestamp: new Date().toLocaleString(),
-      journey: fd.get('journey') || '',
-      selfpub: fd.get('selfpub') || '',
-      print_method: fd.get('print_method') || '',
-      hardest_part: fd.get('hardest_part') || '',
-      wish_told: fd.get('wish_told') || '',
-      unanswered_questions: fd.get('unanswered_questions') || '',
-      helpful_services: services.join(', '),
-      missing_service: fd.get('missing_service') || '',
-      publisher_experience: fd.get('publisher_experience') || '',
-      selling_challenge: fd.get('selling_challenge') || '',
-      financial_surprise: fd.get('financial_surprise') || '',
-      interest: fd.get('interest') || '',
-      wish_existed: fd.get('wish_existed') || '',
-      name: fd.get('name') || '',
-      email: fd.get('email') || ''
-    };
+    // Build URL-encoded params (reliable with Apps Script no-cors)
+    const params = new URLSearchParams();
+    params.append('timestamp', new Date().toLocaleString());
+    params.append('journey', fd.get('journey') || '');
+    params.append('selfpub', fd.get('selfpub') || '');
+    params.append('print_method', fd.get('print_method') || '');
+    params.append('hardest_part', fd.get('hardest_part') || '');
+    params.append('wish_told', fd.get('wish_told') || '');
+    params.append('unanswered_questions', fd.get('unanswered_questions') || '');
+    params.append('helpful_services', services.join(', '));
+    params.append('missing_service', fd.get('missing_service') || '');
+    params.append('publisher_experience', fd.get('publisher_experience') || '');
+    params.append('selling_challenge', fd.get('selling_challenge') || '');
+    params.append('financial_surprise', fd.get('financial_surprise') || '');
+    params.append('interest', fd.get('interest') || '');
+    params.append('wish_existed', fd.get('wish_existed') || '');
+    params.append('name', fd.get('name') || '');
+    params.append('email', fd.get('email') || '');
 
     try {
-      const resp = await fetch(APPS_SCRIPT_URL, {
+      await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
       });
       document.getElementById('survey-form').style.display = 'none';
       document.getElementById('thank-you').style.display = 'block';
