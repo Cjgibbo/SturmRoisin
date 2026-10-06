@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Supplement Stack Calculator</title>
+<style>
+:root {
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --text: #1a1a2e;
+  --text-muted: #5a5a7a;
+  --accent: #2d6a4f;
+  --accent-light: #e8f5e9;
+  --border: #dee2e6;
+  --strong: #1b5e20;
+  --moderate: #e65100;
+  --emerging: #5c6bc0;
+  --morning: #fff3e0;
+  --morning-border: #ff9800;
+  --midday: #e3f2fd;
+  --midday-border: #2196f3;
+  --evening: #ede7f6;
+  --evening-border: #7e57c2;
+  --bedtime: #e8eaf6;
+  --bedtime-border: #3f51b5;
+  --danger: #c62828;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121212;
+    --surface: #1e1e2e;
+    --text: #e0e0e0;
+    --text-muted: #a0a0b0;
+    --accent: #4caf50;
+    --accent-light: #1b3a1f;
+    --border: #333348;
+    --strong: #66bb6a;
+    --moderate: #ff9800;
+    --emerging: #7986cb;
+    --morning: #2a2010;
+    --morning-border: #ff9800;
+    --midday: #0d1f2d;
+    --midday-border: #42a5f5;
+    --evening: #1a1528;
+    --evening-border: #9575cd;
+    --bedtime: #141528;
+    --bedtime-border: #5c6bc0;
+    --danger: #ef5350;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121212;
+  --surface: #1e1e2e;
+  --text: #e0e0e0;
+  --text-muted: #a0a0b0;
+  --accent: #4caf50;
+  --accent-light: #1b3a1f;
+  --border: #333348;
+  --strong: #66bb6a;
+  --moderate: #ff9800;
+  --emerging: #7986cb;
+  --morning: #2a2010;
+  --morning-border: #ff9800;
+  --midday: #0d1f2d;
+  --midday-border: #42a5f5;
+  --evening: #1a1528;
+  --evening-border: #9575cd;
+  --bedtime: #141528;
+  --bedtime-border: #5c6bc0;
+  --danger: #ef5350;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: var(--accent); }
+h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+.disclaimer {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  padding: 12px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.input-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.input-group { flex: 1; min-width: 140px; }
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+}
+.input-group input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  background: var(--bg);
+  color: var(--text);
+}
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+}
+.goal-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-size: 0.9rem;
+  user-select: none;
+}
+.goal-item:hover { border-color: var(--accent); }
+.goal-item.selected {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.goal-item input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.goal-icon { font-size: 1.1rem; }
+button.generate {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+}
+button.generate:hover { opacity: 0.9; }
+button.generate:disabled { opacity: 0.5; cursor: not-allowed; }
+#results { display: none; }
+.supp-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.supp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.supp-name { font-weight: 600; font-size: 0.95rem; }
+.evidence-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.evidence-strong { background: var(--strong); color: #fff; }
+.evidence-moderate { background: var(--moderate); color: #fff; }
+.evidence-emerging { background: var(--emerging); color: #fff; }
+.supp-details { font-size: 0.85rem; color: var(--text-muted); }
+.supp-details span { display: inline-block; margin-right: 12px; margin-bottom: 2px; }
+.supp-goals { font-size: 0.8rem; color: var(--accent); margin-top: 4px; }
+.supp-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+.schedule-block {
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 10px;
+  border-left: 4px solid;
+}
+.schedule-morning { background: var(--morning); border-color: var(--morning-border); }
+.schedule-midday { background: var(--midday); border-color: var(--midday-border); }
+.schedule-evening { background: var(--evening); border-color: var(--evening-border); }
+.schedule-bedtime { background: var(--bedtime); border-color: var(--bedtime-border); }
+.schedule-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+.schedule-item {
+  font-size: 0.85rem;
+  padding: 3px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.schedule-item .dose { color: var(--text-muted); white-space: nowrap; }
+.schedule-context { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-top: 4px; }
+.cost-summary {
+  background: var(--accent-light);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-top: 16px;
+  font-size: 0.9rem;
+}
+.cost-summary .total {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.conflict-note {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.tab-bar {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+.tab-btn {
+  flex: 1;
+  padding: 10px 8px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.synergy { font-size: 0.8rem; color: var(--strong); margin-top: 2px; }
+.evidence-legend {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+}
+.evidence-legend h3 { margin-bottom: 8px; font-size: 0.95rem; }
+.legend-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.legend-row:last-child { margin-bottom: 0; }
+.legend-row .evidence-badge { flex-shrink: 0; margin-top: 1px; }
+.legend-desc { color: var(--text-muted); line-height: 1.4; }
+.individual-flag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: #78909c;
+  color: #fff;
+  margin-left: 6px;
+  white-space: nowrap;
+}
+.frequency-note {
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-top: 2px;
+}
+.shop-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 8px;
+}
+.shop-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+.shop-look {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.shop-avoid {
+  font-size: 0.8rem;
+  color: var(--danger);
+  font-style: italic;
+}
+.shop-tip {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.shop-header {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.tier-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.tier-btn {
+  flex: 1;
+  padding: 8px 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.3;
+  transition: background 0.15s, border-color 0.15s;
+}
+.tier-btn.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.tier-btn .tier-price {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  margin-top: 2px;
+}
+@media (max-width: 400px) {
+  .goals-grid { grid-template-columns: 1fr; }
+  body { padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<h1>Supplement Stack Calculator</h1>
+<p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:12px;">Evidence-based. Budget-friendly. OTC only.</p>
+
+<div class="disclaimer">
+  <strong>Not medical advice.</strong> This tool provides general information about commonly available over-the-counter supplements based on published research. It does not replace a doctor's recommendation. Consult a healthcare provider before starting any supplement regimen, especially if you take medications or have health conditions.
+</div>
+
+<div class="section">
+  <h2>Your Info</h2>
+  <div class="input-row">
+    <div class="input-group">
+      <label for="weight">Body Weight (lbs)</label>
+      <input type="number" id="weight" placeholder="180" min="80" max="500">
+    </div>
+    <div class="input-group">
+      <label for="budget">Monthly Budget (optional)</label>
+      <input type="number" id="budget" placeholder="$50" min="0" max="999">
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>What Are Your Goals?</h2>
+  <div class="goals-grid" id="goalsGrid"></div>
+</div>
+
+<button class="generate" id="generateBtn" onclick="generate()">Build My Stack</button>
+
+<div id="results">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('supplements')">Supplements</button>
+    <button class="tab-btn" onclick="switchTab('schedule')">Schedule</button>
+    <button class="tab-btn" onclick="switchTab('shopping')">Shopping List</button>
+  </div>
+  <div id="supplements" class="tab-panel active"></div>
+  <div id="schedule" class="tab-panel"></div>
+  <div id="shopping" class="tab-panel"></div>
+</div>
+
+<script>
+const GOALS = [
+  { id: 'muscle', label: 'Muscle & Strength', icon: '💪' },
+  { id: 'weight', label: 'Weight / Fat Loss', icon: '⚖️' },
+  { id: 'brain', label: 'Brain & Focus', icon: '🧠' },
+  { id: 'energy', label: 'Energy', icon: '⚡' },
+  { id: 'sleep', label: 'Sleep Quality', icon: '😴' },
+  { id: 'joint', label: 'Joint Health', icon: '🦴' },
+  { id: 'heart', label: 'Heart Health', icon: '❤️' },
+  { id: 'gut', label: 'Gut & Digestion', icon: '🫁' },
+  { id: 'liver', label: 'Liver Support', icon: '🫘' },
+  { id: 'immune', label: 'Immune Support', icon: '🛡️' },
+  { id: 'stress', label: 'Stress & Mood', icon: '🧘' },
+  { id: 'bone', label: 'Bone Health', icon: '🏗️' }
+];
+
+const SUPPLEMENTS = [
+  {
+    id: 'creatine',
+    name: 'Creatine Monohydrate',
+    evidence: 'strong',
+    goals: ['muscle', 'brain', 'energy'],
+    shopping: { lookFor: 'Creatine Monohydrate powder, unflavored. Look for "micronized" on the label — dissolves easier. 5g per serving.', avoid: 'Skip creatine HCL, buffered creatine, liquid creatine, or anything with added fillers. Monohydrate is the studied form.', tip: 'Nutricost or BulkSupplements at Walmart are solid and cheap (~$12-20 for 100 servings). Powder is far cheaper per serving than capsules.' },
+    baseDose: '5g',
+    doseByWeight: true,
+    doseCalc: (lbs) => {
+      const kg = lbs / 2.205;
+      const g = Math.round(kg * 0.03 * 10) / 10;
+      return Math.max(3, Math.min(10, Math.round(g < 3 ? 5 : g > 7 ? 10 : 5))) + 'g';
+    },
+    timing: 'any',
+    slot: 'midday',
+    withFood: 'either',
+    costRange: [4, 10],
+    note: 'Most researched supplement. Monohydrate is the proven form — skip fancy versions. Mix in water or a shake. Takes 2-4 weeks to saturate muscles.',
+    frequency: 'Daily. No loading phase needed — just take it consistently every day.',
+    cycle: null,
+    conflicts: []
+  },
+  {
+    id: 'vitd3',
+    name: 'Vitamin D3',
+    evidence: 'strong',
+    goals: ['bone', 'immune', 'muscle', 'stress', 'energy', 'joint'],
+    shopping: { lookFor: 'Vitamin D3 (cholecalciferol) softgels — 2,000 IU or 5,000 IU. Softgels contain oil which helps absorption. 2,000 IU is safe without bloodwork.', avoid: 'Don\'t grab Vitamin D2 (ergocalciferol) — D3 is more effective. Check the label says D3.', tip: 'Nature\'s Bounty, Spring Valley (Walmart brand), or Kirkland at Costco. One of the cheapest and most impactful supplements you can buy.' },
+    baseDose: '2,000-5,000 IU',
+    doseByWeight: false,
+    timing: 'morning',
+    slot: 'morning',
+    withFood: 'with food (needs fat)',
+    costRange: [3, 8],
+    note: 'Most adults are deficient, especially if you don\'t get regular sun. Pair with K2 for best calcium routing. Fat-soluble — take with a meal that has some fat.',
+    frequency: 'Daily. Safe at 2,000 IU without bloodwork. 5,000 IU is common but ideally get levels checked.',
+    cycle: null,
+    conflicts: [],
+    synergy: 'Pairs well with Vitamin K2 and Magnesium'
+  },
+  {
+    id: 'k2',
+    name: 'Vitamin K2 (MK-7)',
+    evidence: 'strong',
+    goals: ['bone', 'heart'],
+    shopping: { lookFor: 'Vitamin K2 as MK-7 — 100mcg softgels. Some D3 supplements come with K2 already included (combo bottles) — that works and saves a pill.', avoid: 'MK-4 form is shorter-lasting in the body. MK-7 is the better-studied form.', tip: 'A D3+K2 combo bottle is the easiest move. Sports Research and Nutricost both make good ones available at Walmart.' },
+    baseDose: '100-200mcg',
+    doseByWeight: false,
+    timing: 'morning',
+    slot: 'morning',
+    withFood: 'with food (needs fat)',
+    costRange: [5, 12],
+    note: 'Directs calcium into bones and away from arteries. Almost always worth pairing with D3. MK-7 form lasts longer in the body than MK-4.',
+    frequency: 'Daily. 100-200mcg MK-7 is the studied range. Safe for long-term use.',
+    cycle: null,
+    conflicts: ['blood thinners — talk to your doctor'],
+    synergy: 'Take alongside Vitamin D3'
+  },
+  {
+    id: 'magnesium',
+    name: 'Magnesium',
+    evidence: 'strong',
+    goals: ['sleep', 'muscle', 'stress', 'heart', 'bone', 'energy'],
+    shopping: { lookFor: 'Magnesium Glycinate (or Bisglycinate) — 200mg capsules. This is the form for sleep and relaxation. If you want cognitive support, look for Magnesium Threonate (branded as Magtein).', avoid: 'Magnesium Oxide — it\'s the cheapest on the shelf but absorbs poorly. Your body barely uses it. Also skip Magnesium Citrate unless you need the laxative effect.', tip: 'Doctor\'s Best and Nature\'s Bounty make glycinate forms at Walmart. Check the label — it should say "glycinate" or "bisglycinate," not just "magnesium."' },
+    baseDose: '200-400mg',
+    doseByWeight: false,
+    timing: 'evening',
+    slot: 'evening',
+    withFood: 'with food',
+    costRange: [5, 12],
+    note: 'Glycinate form for sleep and calm. Threonate for cognitive support. Citrate if constipation is an issue. Avoid oxide — poorly absorbed. Most people are mildly deficient.',
+    frequency: 'Daily. 200-400mg is within safe range. Upper tolerable limit is 350mg from supplements.',
+    cycle: null,
+    conflicts: ['Separate from calcium by 2hrs if taking high doses of both'],
+    synergy: 'Enhances Vitamin D absorption'
+  },
+  {
+    id: 'omega3',
+    name: 'Omega-3 Fish Oil',
+    evidence: 'strong',
+    goals: ['heart', 'brain', 'joint', 'stress'],
+    shopping: { lookFor: 'Fish Oil softgels — flip the bottle over and check the Supplement Facts for EPA and DHA amounts. You want 500mg+ of EPA+DHA combined per serving. The front label "1000mg Fish Oil" is the total oil, not the active ingredients.', avoid: 'Cheap fish oil where EPA+DHA totals under 300mg per serving — that\'s mostly filler oil and you\'d need 4-5 capsules a day.', tip: 'Nature Made, Kirkland, or Nutricost are solid budget options. Store in the fridge — keeps them fresh and reduces fish burps.' },
+    baseDose: '1-2g EPA+DHA combined',
+    doseByWeight: false,
+    timing: 'morning or midday',
+    slot: 'midday',
+    withFood: 'with food (needs fat)',
+    costRange: [8, 18],
+    note: 'Look for total EPA+DHA on the label, not total fish oil. Many cheap bottles are mostly filler oil. Store in the fridge to prevent rancidity and reduce fish burps.',
+    frequency: 'Daily. 1-2g of actual EPA+DHA (not total fish oil weight) is the studied range.',
+    cycle: null,
+    conflicts: ['May increase bleeding risk with blood thinners']
+  },
+  {
+    id: 'zinc',
+    name: 'Zinc',
+    evidence: 'strong',
+    goals: ['immune', 'muscle', 'stress'],
+    shopping: { lookFor: 'Zinc Picolinate or Zinc Bisglycinate — 15mg or 30mg capsules. These forms absorb best. If taking 15mg+ daily for more than a month, grab a copper supplement too (1-2mg) to prevent zinc from depleting copper.', avoid: 'Zinc Oxide — poorly absorbed, common in cheap brands. Check the form on the Supplement Facts panel.', tip: 'Nature\'s Bounty Zinc 50mg is everywhere but that\'s a high dose — 15-30mg is plenty for most people. Nutricost Zinc Picolinate is a better bet.' },
+    baseDose: '15-30mg',
+    doseByWeight: false,
+    timing: 'evening',
+    slot: 'evening',
+    withFood: 'with food',
+    costRange: [3, 7],
+    note: 'Picolinate or bisglycinate forms absorb best. Don\'t exceed 40mg/day long-term. If taking >15mg daily for more than a few weeks, add 1-2mg copper to prevent depletion.',
+    frequency: 'Daily. 15mg is a safe general dose. 30mg for immune support but don\'t stay there long-term without copper.',
+    cycle: null,
+    conflicts: ['Don\'t take with iron or calcium — separate by 2+ hours']
+  },
+  {
+    id: 'vitc',
+    name: 'Vitamin C',
+    evidence: 'strong',
+    goals: ['immune', 'joint'],
+    shopping: { lookFor: 'Vitamin C (ascorbic acid) — 500mg tablets or capsules. Nothing fancy needed. Plain ascorbic acid works fine.', avoid: 'No need for expensive "liposomal" or "buffered" forms unless regular vitamin C bothers your stomach.', tip: 'Spring Valley at Walmart or any store brand. This is one of the cheapest supplements on the shelf.' },
+    baseDose: '500-1,000mg',
+    doseByWeight: false,
+    timing: 'morning',
+    slot: 'morning',
+    withFood: 'either',
+    costRange: [3, 6],
+    note: 'Supports immune function and collagen synthesis. Boosts iron absorption if taken together. Excess is excreted — no need to go above 1,000mg/day.',
+    cycle: null,
+    conflicts: [],
+    synergy: 'Take with Iron to boost absorption'
+  },
+  {
+    id: 'ashwagandha',
+    name: 'Ashwagandha (KSM-66)',
+    evidence: 'strong',
+    goals: ['stress', 'muscle', 'sleep', 'energy'],
+    shopping: { lookFor: 'Ashwagandha extract — look for "KSM-66" or "Sensoril" on the label. 300mg capsules. These are the specific extracts used in clinical trials.', avoid: 'Generic "ashwagandha root powder" is less standardized and less studied. The extract matters.', tip: 'Nutricost KSM-66 Ashwagandha is available at Walmart. The brand name "KSM-66" on the bottle is what you\'re looking for.' },
+    baseDose: '300-600mg',
+    doseByWeight: false,
+    timing: 'morning or evening',
+    slot: 'morning',
+    withFood: 'with food',
+    costRange: [6, 14],
+    note: 'KSM-66 and Sensoril are the clinically studied extracts. Studies show it lowers cortisol and may modestly improve testosterone. Not a miracle pill, but real data backs the stress-reduction claims. Cycle it so your body doesn\'t adapt.',
+    frequency: 'Daily during an 8-week cycle, then take 2-4 weeks off before restarting.',
+    individual: true,
+    individualNote: 'Response varies — some people feel a clear difference in stress and sleep within a week, others notice little. Give it a full 4-week trial before deciding.',
+    cycle: '8 weeks on, 2-4 weeks off',
+    conflicts: ['May interact with thyroid medication']
+  },
+  {
+    id: 'fiber',
+    name: 'Psyllium Husk Fiber',
+    evidence: 'strong',
+    goals: ['gut', 'weight', 'heart'],
+    shopping: { lookFor: 'Psyllium Husk powder — unflavored, no added sugar. Metamucil is the name brand but the active ingredient is just psyllium.', avoid: 'Flavored versions with added sugars or artificial sweeteners if you can handle the plain version.', tip: 'Walmart\'s Equate Fiber Therapy is the same thing as Metamucil at half the price. Or buy bulk psyllium husk powder in the supplement aisle.' },
+    baseDose: '5-10g',
+    doseByWeight: false,
+    timing: 'before meals',
+    slot: 'morning',
+    withFood: 'before food with large glass of water',
+    costRange: [4, 10],
+    note: 'Start with 5g and increase slowly or you\'ll have gas. Always drink plenty of water. Helps with cholesterol, blood sugar control, and feeling full. Take other supplements 1hr apart — fiber can slow their absorption.',
+    cycle: null,
+    conflicts: ['Take other medications/supplements 1hr before or 2hrs after']
+  },
+  {
+    id: 'probiotics',
+    name: 'Probiotic',
+    evidence: 'moderate',
+    goals: ['gut', 'immune'],
+    shopping: { lookFor: 'Multi-strain probiotic with Lactobacillus and Bifidobacterium strains — 10+ billion CFU. Check if it says "at time of manufacture" vs "at expiration" — at expiration is better because CFU count drops over time.', avoid: 'Single-strain probiotics unless your doctor recommended a specific one. Also skip gummy probiotics — the heat of manufacturing kills a lot of the cultures.', tip: 'Refrigerated brands (Culturelle, Align) tend to be more reliable. If budget is tight, Walmart\'s Spring Valley Probiotic is a decent entry point.' },
+    baseDose: '10-50 billion CFU',
+    doseByWeight: false,
+    timing: 'morning',
+    slot: 'morning',
+    withFood: 'empty stomach or just before food',
+    costRange: [8, 20],
+    note: 'Look for multiple strains (Lactobacillus, Bifidobacterium). Refrigerated brands tend to be higher quality. More useful after antibiotics or gut issues.',
+    frequency: 'Daily while using. Can take breaks — your gut flora is unique.',
+    individual: true,
+    individualNote: 'Gut bacteria vary widely from person to person. What works great for one person may do nothing for another. If you don\'t notice a difference after 4-6 weeks, a different strain blend or stopping may be the move.',
+    cycle: null,
+    conflicts: []
+  },
+  {
+    id: 'turmeric',
+    name: 'Turmeric / Curcumin',
+    evidence: 'moderate',
+    goals: ['joint', 'liver', 'gut'],
+    shopping: { lookFor: 'Turmeric Curcumin with BioPerine (piperine/black pepper extract). The piperine MUST be on the label. 500mg curcumin per capsule. Look for "95% curcuminoids" standardization.', avoid: 'Plain turmeric powder capsules without piperine — your body absorbs almost none of the curcumin without it. Don\'t waste the money.', tip: 'Nature\'s Bounty Turmeric with Black Pepper is at most Walmarts. BioSchwartz is another solid option.' },
+    baseDose: '500-1,000mg curcumin',
+    doseByWeight: false,
+    timing: 'with meals',
+    slot: 'midday',
+    withFood: 'with food — MUST include piperine/black pepper',
+    costRange: [6, 15],
+    note: 'Curcumin alone is barely absorbed. Needs piperine (black pepper extract) — absorption jumps dramatically without it you\'re wasting your money. Buy a formula that includes it. Studies show anti-inflammatory effects, but it\'s not a replacement for medication if you have a diagnosed condition.',
+    frequency: 'Daily with meals. Long-term use appears safe at recommended doses.',
+    individual: true,
+    individualNote: 'Anti-inflammatory benefits are real but gradual. Don\'t expect overnight joint relief — most studies show effects at 8-12 weeks. If you have a serious inflammatory condition, this supports but doesn\'t replace medical treatment.',
+    cycle: null,
+    conflicts: ['May increase bleeding risk with blood thinners', 'May interact with diabetes medication']
+  },
+  {
+    id: 'milkthistle',
+    name: 'Milk Thistle (Silymarin)',
+    evidence: 'moderate',
+    goals: ['liver'],
+    shopping: { lookFor: 'Milk Thistle standardized to 70-80% Silymarin — 200mg or 250mg capsules. Silymarin is the active compound, so the standardization percentage matters.', avoid: 'Unstandardized milk thistle — if it doesn\'t say a silymarin percentage, you don\'t know what you\'re getting.', tip: 'Nature\'s Bounty and Spring Valley both carry standardized milk thistle at Walmart. Cheap and widely available.' },
+    baseDose: '200-400mg silymarin',
+    doseByWeight: false,
+    timing: 'with meals',
+    slot: 'midday',
+    withFood: 'with food',
+    costRange: [4, 10],
+    note: 'Best-studied herb for liver support. Standardized to 70-80% silymarin. Used clinically in Europe for liver conditions. Not a substitute for addressing what\'s stressing your liver (alcohol, medications, diet) but supports the organ while you do.',
+    frequency: 'Daily. Safe for long-term use at recommended doses.',
+    cycle: null,
+    conflicts: []
+  },
+  {
+    id: 'coq10',
+    name: 'CoQ10 (Ubiquinol)',
+    evidence: 'moderate',
+    goals: ['heart', 'energy'],
+    shopping: { lookFor: 'CoQ10 as Ubiquinol — 100mg softgels. Ubiquinol is the active, reduced form your body actually uses. Softgels absorb better than dry capsules for this one.', avoid: 'Ubiquinone (the oxidized form) — it\'s cheaper but your body has to convert it, and that conversion gets less efficient with age.', tip: 'Qunol at Walmart is one of the more accessible ubiquinol brands. This is one of the pricier supplements — worth it if you\'re on statins or over 40.' },
+    baseDose: '100-200mg',
+    doseByWeight: false,
+    timing: 'morning',
+    slot: 'morning',
+    withFood: 'with food (needs fat)',
+    costRange: [10, 25],
+    note: 'Ubiquinol form is better absorbed than ubiquinone, especially over age 40. Important if you take statins — they deplete CoQ10. Supports cellular energy production.',
+    cycle: null,
+    conflicts: ['May interact with blood thinners']
+  },
+  {
+    id: 'ltheanine',
+    name: 'L-Theanine',
+    evidence: 'moderate',
+    goals: ['brain', 'stress', 'sleep'],
+    shopping: { lookFor: 'L-Theanine — 200mg capsules. Simple amino acid, most brands are equivalent. Some are branded as "Suntheanine" which is a patented form.', avoid: 'No major pitfalls here — L-Theanine is L-Theanine. Just check the dose per capsule.', tip: 'Nutricost and Nature\'s Bounty carry it. If you drink green tea regularly, you\'re already getting some naturally.' },
+    baseDose: '100-200mg',
+    doseByWeight: false,
+    timing: 'flexible',
+    slot: 'evening',
+    withFood: 'either',
+    costRange: [5, 12],
+    note: 'Found naturally in green tea. Promotes calm focus without drowsiness during the day. At bedtime it supports sleep quality. Pairs well with caffeine for focus without jitters.',
+    cycle: null,
+    conflicts: []
+  },
+  {
+    id: 'collagen',
+    name: 'Collagen Peptides',
+    evidence: 'moderate',
+    goals: ['joint'],
+    shopping: { lookFor: 'Collagen Peptides (hydrolyzed) powder — unflavored. Type I & III for general use (skin, hair, nails). Type II specifically for joint cartilage. "Hydrolyzed" means it dissolves and absorbs well.', avoid: 'Collagen gummies — the dose per gummy is tiny, you\'d need a handful to match one scoop of powder.', tip: 'Vital Proteins and Great Lakes are popular but pricey. Walmart\'s Spring Valley Collagen Peptides powder is much cheaper and does the same job.' },
+    baseDose: '10-15g',
+    doseByWeight: false,
+    timing: 'morning',
+    slot: 'morning',
+    withFood: 'either — mixes into coffee/smoothie',
+    costRange: [10, 20],
+    note: 'Type II for joints, Types I & III for skin/hair. Mix into coffee or a shake. Pair with vitamin C for collagen synthesis.',
+    frequency: 'Daily. Give it 8-12 weeks before judging — this is a slow-build supplement.',
+    individual: true,
+    individualNote: 'Joint and skin improvements are reported in studies but vary. Some people notice real changes, others don\'t. 8-12 weeks is the minimum fair trial.',
+    cycle: null,
+    conflicts: [],
+    synergy: 'Pair with Vitamin C for synthesis'
+  },
+  {
+    id: 'bcomplex',
+    name: 'B-Complex',
+    evidence: 'strong',
+    goals: ['energy', 'brain'],
+    shopping: { lookFor: 'B-Complex with methylated forms — look for "methylcobalamin" (B12) and "methylfolate" (B9) on the Supplement Facts. These are the forms your body uses directly without conversion.', avoid: 'Cyanocobalamin (cheap B12 form) and folic acid (synthetic folate) — they work but require your body to convert them, and some people convert poorly.', tip: 'Nature Made Super B-Complex or Nutricost B-Complex are widely available. Don\'t panic when your urine turns neon yellow — that\'s normal (riboflavin/B2).' },
+    baseDose: '1 capsule (varies by formula)',
+    doseByWeight: false,
+    timing: 'morning',
+    slot: 'morning',
+    withFood: 'with food (can cause nausea without)',
+    costRange: [4, 10],
+    note: 'B12 especially important if you eat little meat. Can turn urine bright yellow — that\'s normal (riboflavin). Take in the morning — B vitamins are energizing and may disrupt sleep if taken late.',
+    cycle: null,
+    conflicts: []
+  },
+  {
+    id: 'iron',
+    name: 'Iron (Bisglycinate)',
+    evidence: 'strong',
+    goals: ['energy'],
+    shopping: { lookFor: 'Iron Bisglycinate (also called "Gentle Iron") — 18mg or 25mg capsules. This form is easiest on your stomach.', avoid: 'Ferrous Sulfate — it\'s the cheapest but notorious for constipation and stomach pain. Worth paying a couple dollars more for bisglycinate.', tip: 'Only buy this if you\'ve confirmed you\'re deficient through bloodwork. Excess iron is genuinely harmful. Solgar Gentle Iron is widely available.' },
+    baseDose: '18-27mg',
+    doseByWeight: false,
+    timing: 'morning, empty stomach',
+    slot: 'morning_empty',
+    withFood: 'empty stomach preferred — take with vitamin C',
+    costRange: [4, 8],
+    note: 'Only supplement if actually deficient — excess iron is harmful. Get tested first. Bisglycinate form is gentlest on the stomach. Take with vitamin C, avoid dairy/calcium/coffee at the same time.',
+    frequency: 'Daily if deficient. Every other day may be equally effective with fewer side effects (recent research supports this). Stop once levels normalize.',
+    cycle: 'Only if deficient — get bloodwork',
+    conflicts: ['Don\'t take with calcium, zinc, or magnesium — separate by 2+ hrs', 'Don\'t take with coffee/tea']
+  },
+  {
+    id: 'calcium',
+    name: 'Calcium Citrate',
+    evidence: 'strong',
+    goals: ['bone'],
+    shopping: { lookFor: 'Calcium Citrate — 500mg tablets. Citrate absorbs well even without food, unlike carbonate. If you eat dairy regularly you may not need this at all.', avoid: 'Calcium Carbonate (like Tums) — requires stomach acid to absorb and is less effective for people with low stomach acid or on acid reducers.', tip: 'Citracal is the main name brand. Store brands labeled "Calcium Citrate" are equivalent. Don\'t take more than 500mg at once — split if needed.' },
+    baseDose: '500-600mg',
+    doseByWeight: false,
+    timing: 'midday',
+    slot: 'midday',
+    withFood: 'citrate form works without food; carbonate needs food',
+    costRange: [4, 10],
+    note: 'Food-first — dairy, leafy greens, fortified foods. Only supplement if your diet falls short. Split doses (no more than 500mg at a time). Citrate absorbs better than carbonate.',
+    cycle: null,
+    conflicts: ['Don\'t take with iron or zinc — separate by 2+ hrs', 'Separate from magnesium if taking high doses']
+  },
+  {
+    id: 'nac',
+    name: 'NAC (N-Acetyl Cysteine)',
+    evidence: 'moderate',
+    goals: ['liver', 'immune'],
+    shopping: { lookFor: 'NAC (N-Acetyl Cysteine) — 600mg capsules. Straightforward supplement, most brands are equivalent.', avoid: 'No major form differences to worry about. Just check the dose — 600mg per capsule is standard.', tip: 'NOW Foods and Nutricost carry it. May be in the specialty supplement section rather than the main vitamin aisle.' },
+    baseDose: '600-1,200mg',
+    doseByWeight: false,
+    timing: 'morning or midday',
+    slot: 'morning',
+    withFood: 'empty stomach or with light food',
+    costRange: [6, 14],
+    note: 'Precursor to glutathione, the body\'s master antioxidant. Used clinically for liver support (it\'s the actual treatment for acetaminophen overdose). Also studied for respiratory health.',
+    frequency: 'Daily. 600mg once or twice a day is the common range.',
+    cycle: null,
+    conflicts: []
+  },
+  {
+    id: 'melatonin',
+    name: 'Melatonin',
+    evidence: 'strong',
+    goals: ['sleep'],
+    shopping: { lookFor: 'Melatonin — 1mg or 3mg tablets. Start with the lowest dose. Sublingual (dissolves under tongue) acts faster than swallowed tablets.', avoid: 'Don\'t grab the 5mg or 10mg bottles. More is not better with melatonin — higher doses can actually make sleep worse and cause morning grogginess.', tip: 'Natrol and Spring Valley are everywhere. The 1mg bottles are sometimes harder to find than the 5mg — look specifically for low-dose.' },
+    baseDose: '0.5-3mg',
+    doseByWeight: false,
+    timing: '30-60min before bed',
+    slot: 'bedtime',
+    withFood: 'either',
+    costRange: [3, 7],
+    note: 'Less is more — start at 0.5mg. Higher doses don\'t work better and can cause grogginess. Best for resetting sleep timing (jet lag, shift work). Not ideal for long-term nightly use.',
+    frequency: 'As needed, not necessarily every night. Best for short stints — resetting your clock, not a permanent sleep crutch.',
+    cycle: 'Best short-term or intermittent use',
+    conflicts: []
+  }
+];
+
+// Build goals grid
+const goalsGrid = document.getElementById('goalsGrid');
+GOALS.forEach(g => {
+  const div = document.createElement('div');
+  div.className = 'goal-item';
+  div.innerHTML = `<input type="checkbox" id="goal_${g.id}" value="${g.id}"><span class="goal-icon">${g.icon}</span><span>${g.label}</span>`;
+  div.onclick = (e) => {
+    if (e.target.type !== 'checkbox') {
+      const cb = div.querySelector('input');
+      cb.checked = !cb.checked;
+    }
+    div.classList.toggle('selected', div.querySelector('input').checked);
+  };
+  goalsGrid.appendChild(div);
+});
+
+function getSelectedGoals() {
+  return GOALS.filter(g => document.getElementById('goal_' + g.id).checked).map(g => g.id);
+}
+
+function getWeight() {
+  return parseFloat(document.getElementById('weight').value) || 180;
+}
+
+function getBudget() {
+  return parseFloat(document.getElementById('budget').value) || null;
+}
+
+// Global state for tier switching
+let currentMatched = [];
+let currentGoals = [];
+let currentWeight = 180;
+let currentBudget = null;
+let currentTier = 'recommended';
+
+function generate() {
+  const goals = getSelectedGoals();
+  if (goals.length === 0) {
+    alert('Select at least one goal.');
+    return;
+  }
+  currentGoals = goals;
+  currentWeight = getWeight();
+  currentBudget = getBudget();
+
+  // Get matching supplements, de-duped
+  currentMatched = SUPPLEMENTS.filter(s => s.goals.some(g => goals.includes(g)));
+
+  // Sort: strong evidence first, then by number of matching goals
+  currentMatched.sort((a, b) => {
+    const evOrder = { strong: 0, moderate: 1, emerging: 2 };
+    if (evOrder[a.evidence] !== evOrder[b.evidence]) return evOrder[a.evidence] - evOrder[b.evidence];
+    const aMatches = a.goals.filter(g => goals.includes(g)).length;
+    const bMatches = b.goals.filter(g => goals.includes(g)).length;
+    return bMatches - aMatches;
+  });
+
+  currentTier = 'recommended';
+  renderSupplements();
+  renderSchedule();
+  renderShopping();
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+
+function getFilteredSupplements(tier) {
+  if (tier === 'full') return currentMatched;
+  if (tier === 'recommended') return currentMatched.filter(s => s.evidence === 'strong');
+  // Foundation: top 4 by (goals covered + evidence weight), sorted by most coverage per dollar
+  if (tier === 'foundation') {
+    const scored = currentMatched
+      .filter(s => s.evidence === 'strong')
+      .map(s => {
+        const goalsCovered = s.goals.filter(g => currentGoals.includes(g)).length;
+        const avgCost = (s.costRange[0] + s.costRange[1]) / 2;
+        const score = (goalsCovered * 10) / avgCost;
+        return { ...s, _score: score, _goalsCovered: goalsCovered };
+      })
+      .sort((a, b) => b._score - a._score);
+    // Take top 4, but ensure at least some coverage
+    return scored.slice(0, 4);
+  }
+  return currentMatched;
+}
+
+function getTierCosts(tier) {
+  const filtered = getFilteredSupplements(tier);
+  let lo = 0, hi = 0;
+  filtered.forEach(s => { lo += s.costRange[0]; hi += s.costRange[1]; });
+  return { lo, hi, count: filtered.length };
+}
+
+function switchTier(tier) {
+  currentTier = tier;
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tier-btn[onclick="switchTier('${tier}')"]`).classList.add('active');
+  renderSupplements();
+  renderSchedule();
+  renderShopping();
+}
+
+function renderSupplements() {
+  const filtered = getFilteredSupplements(currentTier);
+  const weight = currentWeight;
+  const budget = currentBudget;
+  const goals = currentGoals;
+
+  // Tier costs for the toggle labels
+  const foundCosts = getTierCosts('foundation');
+  const recCosts = getTierCosts('recommended');
+  const fullCosts = getTierCosts('full');
+
+  const tierDescriptions = {
+    foundation: `The ${foundCosts.count} supplements that cover the most of your goals for the least money. The essentials.`,
+    recommended: `All ${recCosts.count} Well-Studied supplements for your goals. Solid evidence behind every one.`,
+    full: `Everything that matches your goals — ${fullCosts.count} supplements including Promising-tier options. The complete picture.`
+  };
+
+  let suppHTML = `<div class="tier-bar">
+    <button class="tier-btn${currentTier === 'foundation' ? ' active' : ''}" onclick="switchTier('foundation')">Foundation<span class="tier-price">~$${foundCosts.lo}-${foundCosts.hi}/mo</span></button>
+    <button class="tier-btn${currentTier === 'recommended' ? ' active' : ''}" onclick="switchTier('recommended')">Recommended<span class="tier-price">~$${recCosts.lo}-${recCosts.hi}/mo</span></button>
+    <button class="tier-btn${currentTier === 'full' ? ' active' : ''}" onclick="switchTier('full')">Full Stack<span class="tier-price">~$${fullCosts.lo}-${fullCosts.hi}/mo</span></button>
+  </div>`;
+
+  suppHTML += `<div class="evidence-legend">
+    <h3>What the evidence badges mean</h3>
+    <div class="legend-row">
+      <span class="evidence-badge evidence-strong">Well-Studied</span>
+      <span class="legend-desc">Multiple clinical trials, broadly recognized by medical and sports nutrition authorities. This stuff works for most people at recommended doses.</span>
+    </div>
+    <div class="legend-row">
+      <span class="evidence-badge evidence-moderate">Promising</span>
+      <span class="legend-desc">Some clinical evidence supports it, but research is still building. May help — not guaranteed. Worth trying if it fits your goals, but don't expect miracles.</span>
+    </div>
+    <div class="legend-row">
+      <span class="evidence-badge evidence-emerging">Early Research</span>
+      <span class="legend-desc">Limited human studies. Interesting preliminary data but too soon to call it proven. Lowest priority if budget is tight.</span>
+    </div>
+    <div class="legend-row" style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);">
+      <span class="individual-flag">Individual</span>
+      <span class="legend-desc">Results vary significantly from person to person. What works for someone else may not work for you. Give it a fair trial (4-6 weeks), then assess honestly.</span>
+    </div>
+  </div>`;
+
+  suppHTML += `<p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">${tierDescriptions[currentTier]} None of these are cure-alls — they support your body alongside a decent diet, not instead of one.</p>`;
+
+  let totalLow = 0, totalHigh = 0;
+
+  filtered.forEach(s => {
+    const matchedGoals = s.goals.filter(g => goals.includes(g));
+    const goalLabels = matchedGoals.map(gid => GOALS.find(g => g.id === gid).label);
+    let dose = s.baseDose;
+    if (s.doseByWeight && s.doseCalc) {
+      dose = s.doseCalc(weight) + ` (based on ${weight} lbs)`;
+    }
+    const evClass = `evidence-${s.evidence}`;
+    const evLabels = { strong: 'Well-Studied', moderate: 'Promising', emerging: 'Early Research' };
+    const evLabel = evLabels[s.evidence] || s.evidence;
+
+    totalLow += s.costRange[0];
+    totalHigh += s.costRange[1];
+
+    suppHTML += `<div class="supp-card">
+      <div class="supp-header">
+        <span class="supp-name">${s.name}${s.individual ? '<span class="individual-flag">Individual</span>' : ''}</span>
+        <span class="evidence-badge ${evClass}">${evLabel}</span>
+      </div>
+      <div class="supp-details">
+        <span>📏 ${dose}</span>
+        <span>⏰ ${s.timing}</span>
+        <span>🍽️ ${s.withFood}</span>
+        <span>💵 $${s.costRange[0]}-${s.costRange[1]}/mo</span>
+      </div>
+      <div class="supp-goals">Supports: ${goalLabels.join(', ')}</div>
+      ${s.frequency ? `<div class="frequency-note">📅 ${s.frequency}</div>` : ''}
+      ${s.synergy ? `<div class="synergy">✦ ${s.synergy}</div>` : ''}
+      ${s.cycle ? `<div class="supp-note">🔄 Cycle: ${s.cycle}</div>` : ''}
+      ${s.conflicts.length ? `<div class="supp-note" style="color:var(--danger)">⚠️ ${s.conflicts.join(' · ')}</div>` : ''}
+      ${s.individualNote ? `<div class="supp-note" style="color:var(--text);font-style:normal;background:var(--bg);padding:8px;border-radius:4px;margin-top:6px;">🔍 <strong>Real talk:</strong> ${s.individualNote}</div>` : ''}
+      <div class="supp-note">${s.note}</div>
+    </div>`;
+  });
+
+  // Cost summary
+  suppHTML += `<div class="cost-summary">
+    <div class="total">Estimated total: $${totalLow} – $${totalHigh} / month</div>
+    <div style="margin-top:4px;font-size:0.85rem;color:var(--text-muted)">Approximate pricing at Walmart, CVS, or Walgreens. Powder forms (creatine, fiber, collagen) and store brands are the cheapest way to go.</div>
+    ${budget ? `<div style="margin-top:8px;font-size:0.9rem;">Your budget: <strong>$${budget}/mo</strong> — ${budget >= totalHigh ? 'covers this tier at the high end.' : budget >= totalLow ? 'falls within this tier\'s range.' : 'below this tier\'s estimate. You pick what matters most to you — the evidence badges and your goals can help you decide.'}</div>` : ''}
+  </div>`;
+
+  document.getElementById('supplements').innerHTML = suppHTML;
+}
+
+function renderSchedule() {
+  const filtered = getFilteredSupplements(currentTier);
+  const weight = currentWeight;
+
+  const slots = {
+    morning_empty: { label: '☀️ Wake-Up — Empty Stomach', class: 'schedule-morning', context: 'Before breakfast, with water', items: [] },
+    morning: { label: '🍳 Breakfast — With Food', class: 'schedule-morning', context: 'With your first meal (include some fat)', items: [] },
+    midday: { label: '🌤️ Lunch — With Food', class: 'schedule-midday', context: 'With your midday meal', items: [] },
+    evening: { label: '🌅 Dinner — With Food', class: 'schedule-evening', context: 'With your evening meal', items: [] },
+    bedtime: { label: '🌙 Bedtime — 30-60min Before Sleep', class: 'schedule-bedtime', context: 'As part of wind-down routine', items: [] }
+  };
+
+  filtered.forEach(s => {
+    let dose = s.baseDose;
+    if (s.doseByWeight && s.doseCalc) {
+      dose = s.doseCalc(weight);
+    }
+    const slot = s.slot || 'morning';
+    if (slots[slot]) {
+      slots[slot].items.push({ name: s.name, dose: dose });
+    }
+  });
+
+  let schedHTML = '';
+  let hasConflicts = false;
+
+  const hasIron = filtered.some(s => s.id === 'iron');
+  const hasCalcium = filtered.some(s => s.id === 'calcium');
+  const hasZinc = filtered.some(s => s.id === 'zinc');
+
+  if (hasIron && (hasCalcium || hasZinc)) hasConflicts = true;
+
+  Object.values(slots).forEach(slot => {
+    if (slot.items.length === 0) return;
+    schedHTML += `<div class="schedule-block ${slot.class}">
+      <div class="schedule-label">${slot.label}</div>
+      ${slot.items.map(i => `<div class="schedule-item"><span>${i.name}</span><span class="dose">${i.dose}</span></div>`).join('')}
+      <div class="schedule-context">${slot.context}</div>
+    </div>`;
+  });
+
+  if (hasConflicts) {
+    schedHTML += `<div class="conflict-note">
+      <strong>Conflict handling:</strong> Iron is placed in the morning on an empty stomach, separated from calcium (midday) and zinc/magnesium (evening) by 4+ hours. This schedule automatically spaces competing minerals.
+    </div>`;
+  }
+
+  schedHTML += `<div class="conflict-note">
+    <strong>General rules applied:</strong><br>
+    • Fat-soluble vitamins (D3, K2, CoQ10, Omega-3) are grouped with meals that include fat<br>
+    • Minerals that compete for absorption (iron, calcium, zinc, magnesium) are separated into different time slots<br>
+    • Energizing supplements (B-Complex, Ashwagandha) are in the morning<br>
+    • Calming supplements (Magnesium, L-Theanine, Melatonin) are in the evening/bedtime<br>
+    • Fiber is placed 1hr before other morning supplements to avoid blocking absorption
+  </div>`;
+
+  document.getElementById('schedule').innerHTML = schedHTML;
+}
+
+function renderShopping() {
+  const filtered = getFilteredSupplements(currentTier);
+  const tierNames = { foundation: 'Foundation', recommended: 'Recommended', full: 'Full Stack' };
+
+  let html = `<div class="shop-header">
+    <strong>🛒 ${tierNames[currentTier]} Shopping List — ${filtered.length} items</strong><br>
+    What to look for on the shelf, which forms to grab, and what to skip. This isn't a prescription — it's a guide to help you find the right product when you're standing in the aisle.
+  </div>`;
+
+  filtered.forEach(s => {
+    if (!s.shopping) return;
+    html += `<div class="shop-item">
+      <div class="shop-name">${s.name}</div>
+      <div class="shop-look">✅ <strong>Look for:</strong> ${s.shopping.lookFor}</div>
+      <div class="shop-avoid">❌ <strong>Skip:</strong> ${s.shopping.avoid}</div>
+      ${s.shopping.tip ? `<div class="shop-tip">💡 ${s.shopping.tip}</div>` : ''}
+    </div>`;
+  });
+
+  html += `<div class="conflict-note" style="margin-top:16px;">
+    <strong>General shopping tips:</strong><br>
+    • Store brands (Spring Valley at Walmart, Equate) are often identical to name brands at half the price<br>
+    • Powder forms (creatine, fiber, collagen) are much cheaper per serving than capsules<br>
+    • Check the Supplement Facts panel on the back — the front label is marketing, the back is what you're actually getting<br>
+    • "Proprietary blend" on a label means they're hiding the individual doses — usually a red flag<br>
+    • Buy one thing at a time if you're starting out — that way you know what's actually working
+  </div>`;
+
+  document.getElementById('shopping').innerHTML = html;
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  document.querySelector(`.tab-btn[onclick="switchTab('${tab}')"]`).classList.add('active');
+}
+</script>
+</body>
+</html>
